@@ -20,6 +20,14 @@ No hace falta instalar Java: va todo incluido.
 
 ---
 
+## ☕ Apoya el proyecto
+
+Bitácora 26 nace de la afición por la radio y se comparte gratis con todos los colegas. Si te ayuda en tu estación o en tu radioclub y quieres invitarme a un café, te lo agradeceré mucho. ¡73 y buenos DX!
+
+[![Donar con PayPal](https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=GGPUFZFWW58JQ)
+
+---
+
 ## ✨ Qué puede hacer
 
 ### Libro de guardia
