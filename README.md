@@ -8,7 +8,7 @@ Es un proyecto personal que nace a raíz de mi inexperiencia y de la cantidad de
 
 ![Ventana principal de Bitácora 26](capturas/principal.png)
 
-*Ventana principal de Bitácora 26.*
+*Ventana principal: banda de 20 m en USB, cascada del receptor RTL-SDR, mapa con la estación y el log de contactos.*
 
 ---
 
@@ -48,6 +48,36 @@ No hace falta instalar Java: va todo incluido.
 - Los socios se unen con una **clave de invitación**.
 - Hay varios **niveles de administración**: Radioclub, Superadmin, Admin y Socio.
 - **Seguridad:** todo va con contraseña. Cada usuario crea la suya, y solo él puede entrar con su usuario, anotar contactos y modificar los suyos.
+
+---
+
+## 🖼️ Capturas
+
+**Banda Ciudadana:** los 40 canales a un clic, con el 9 y el 19 destacados.
+
+![Vista de Banda Ciudadana](capturas/banda-ciudadana.png)
+
+**Generador de diplomas:** colocas los datos sobre tu propia plantilla y se crean todos los diplomas de la actividad con un solo clic.
+
+![Generador de diplomas](capturas/generador-diplomas.png)
+
+**Diploma generado** (en PDF):
+
+![Diploma de ejemplo](capturas/diploma-ejemplo.png)
+
+**Radioclub: configuración.** Nombre, indicativos, logo y web del radioclub, y cómo se comparte con los socios (carpeta en la nube o FTP, clave de invitación y contraseña).
+
+![Configurar Radioclub](capturas/configurar-radioclub.png)
+
+**Radioclub: gestión de socios y cuotas.** Altas, cuotas pagadas o pendientes por año y exportación de la lista.
+
+![Gestión del radioclub](capturas/gestion-radioclub.png)
+
+**LOG del Radioclub compartido.** Cada contacto indica qué operador lo hizo y con qué indicativo del radioclub; el botón *Sincronizar* envía lo nuevo y recoge lo de los demás socios.
+
+![LOG del Radioclub](capturas/log-radioclub.png)
+
+*Todos los indicativos, nombres y contactos de las capturas son inventados.*
 
 ---
 
