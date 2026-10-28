@@ -16,7 +16,9 @@ Es un proyecto personal que nace a raíz de mi inexperiencia y de la cantidad de
 
 ## ⬇️ Descarga
 
-👉 **[Descargar la última versión](https://github.com/ea4ixr/Bitacora-26/releases/latest)** (archivo `Bitacora 26.zip`)
+👉 **[Descargar la última versión](https://github.com/ea4ixr/Bitacora-26/releases/latest/download/Bitacora.26.zip)** (archivo `Bitacora.26.zip`, el programa completo)
+
+También puedes ver todas las versiones y sus novedades en [Descargas](https://github.com/ea4ixr/Bitacora-26/releases).
 
 No hace falta instalar Java: va todo incluido.
 
@@ -104,7 +106,7 @@ Bitácora 26 nace de la afición por la radio y se comparte gratis con todos los
 
 ## 🚀 Instalación
 
-1. Descarga **`Bitacora 26.zip`** desde [Descargas](https://github.com/ea4ixr/Bitacora-26/releases/latest).
+1. Descarga **[`Bitacora.26.zip`](https://github.com/ea4ixr/Bitacora-26/releases/latest/download/Bitacora.26.zip)** (la última versión).
 2. Descomprímelo donde quieras, por ejemplo en el Escritorio.
 3. Abre la carpeta **Bitacora 26** y haz doble clic en **`Bitacora 26.exe`**.
 4. La primera vez te pedirá los datos del operador: indicativo, nombre, QTH y locator.
