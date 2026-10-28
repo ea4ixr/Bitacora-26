@@ -20,7 +20,6 @@ Es un proyecto personal que nace a raíz de mi inexperiencia y de la cantidad de
 
 También puedes ver todas las versiones y sus novedades en [Descargas](https://github.com/ea4ixr/Bitacora-26/releases).
 
-No hace falta instalar Java: va todo incluido.
 
 ---
 
