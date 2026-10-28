@@ -1,0 +1,9 @@
+# Página web del proyecto (GitHub Pages): https://ea4ixr.github.io/Bitacora-26/
+title: "Bitácora 26 · Libro de guardia gratuito para radioaficionados y CB"
+description: "Descarga gratis Bitácora 26: libro de guardia (log de contactos) para radioaficionados, Banda Ciudadana (CB 27 MHz) y radioclubs. Programa para Windows, en español."
+lang: es
+theme: jekyll-theme-cayman
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+author: "Javier Alguacil, EA4IXR"

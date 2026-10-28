@@ -1,5 +1,7 @@
 # Bitácora 26
 
+*Libro de guardia (log de contactos) gratuito para Windows: radioaficionados, Banda Ciudadana (CB 27 MHz) y radioclubs.*
+
 **Nace como un libro de guardia para radioaficionados, Banda Ciudadana y radioclubs.**
 
 Bitácora 26 es un programa gratuito para Windows que sirve para anotar los contactos (QSO) de la estación de forma sencilla y sin perder ninguno, sin tener que estar con varias aplicaciones y anotaciones: todo en un mismo sitio. Está pensado tanto para las bandas de radioaficionado como para la CB (27 MHz), y además para gestionar de manera sencilla algunos aspectos de un radioclub.
@@ -14,7 +16,7 @@ Es un proyecto personal que nace a raíz de mi inexperiencia y de la cantidad de
 
 ## ⬇️ Descarga
 
-👉 **[Descargar la última versión](../../releases/latest)** (archivo `Bitacora 26.zip`)
+👉 **[Descargar la última versión](https://github.com/ea4ixr/Bitacora-26/releases/latest)** (archivo `Bitacora 26.zip`)
 
 No hace falta instalar Java: va todo incluido.
 
@@ -102,7 +104,7 @@ Bitácora 26 nace de la afición por la radio y se comparte gratis con todos los
 
 ## 🚀 Instalación
 
-1. Descarga **`Bitacora 26.zip`** desde [Descargas](../../releases/latest).
+1. Descarga **`Bitacora 26.zip`** desde [Descargas](https://github.com/ea4ixr/Bitacora-26/releases/latest).
 2. Descomprímelo donde quieras, por ejemplo en el Escritorio.
 3. Abre la carpeta **Bitacora 26** y haz doble clic en **`Bitacora 26.exe`**.
 4. La primera vez te pedirá los datos del operador: indicativo, nombre, QTH y locator.
@@ -165,6 +167,6 @@ El programa se ofrece **tal cual, sin garantías**. Úsalo bajo tu responsabilid
 
 Javier Alguacil, **EA4IXR** · [QRZ.com/db/EA4IXR](https://www.qrz.com/db/EA4IXR)
 
-Para avisar de un fallo o proponer una mejora, usa la pestaña **Issues** de esta página.
+Para avisar de un fallo o proponer una mejora, usa la pestaña **[Issues](https://github.com/ea4ixr/Bitacora-26/issues)** de esta página.
 
 73 y buenos DX.
