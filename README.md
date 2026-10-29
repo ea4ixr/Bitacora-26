@@ -20,6 +20,8 @@ Es un proyecto personal que nace a raíz de mi inexperiencia y de la cantidad de
 
 También puedes ver todas las versiones y sus novedades en [Descargas](https://github.com/ea4ixr/Bitacora-26/releases).
 
+🔄 **Se actualiza solo:** al abrirlo, el programa mira si hay una versión nueva y, si quieres, se actualiza sin perder nada. También puedes buscarla en *Acerca de → Información de la aplicación → Buscar actualizaciones*.
+
 
 ---
 
@@ -56,8 +58,11 @@ Bitácora 26 nace de la afición por la radio y se comparte gratis con todos los
 ### Radioclub
 - Lleva la gestión de **socios, cuotas y actividades** del radioclub.
 - Hay un **LOG del Radioclub compartido** entre los socios, a través de una carpeta en la nube (Google Drive o similar) o de un servidor FTP.
-- Los socios se unen con una **clave de invitación**.
-- Hay varios **niveles de administración**: Radioclub, Superadmin, Admin y Socio.
+- Los datos y el **logo del radioclub** llegan solos a todos los socios.
+- Cada socio se une con **su propia clave de invitación**, que solo vale con su indicativo. Al unirse, sus datos y los del radioclub se rellenan solos.
+- Hay cuatro **papeles**: PC Radioclub (el ordenador maestro), Super Admin, Admin y Socio. El PC Radioclub decide qué puede hacer cada papel (**Gestionar permisos**).
+- Cada socio aparece una sola vez, aunque tenga el programa en varios ordenadores; su papel va con él en todos.
+- La lista de **Banda Ciudadana** se comparte entre los socios y se puede exportar e importar en `.adi`.
 - **Seguridad:** todo va con contraseña. Cada usuario crea la suya, y solo él puede entrar con su usuario, anotar contactos y modificar los suyos.
 
 ---
@@ -79,6 +84,18 @@ Bitácora 26 nace de la afición por la radio y se comparte gratis con todos los
 **Radioclub: configuración.** Nombre, indicativos, logo y web del radioclub, y cómo se comparte con los socios (carpeta en la nube o FTP, clave de invitación y contraseña).
 
 ![Configurar Radioclub](capturas/configurar-radioclub.png)
+
+**Radioclub: socios y papeles.** Cada socio sale una sola vez con sus ordenadores y su papel. Desde aquí se nombran los Super Admin y Admin, se saca la clave de invitación de cada socio y se puede expulsar a quien no deba estar.
+
+![Socios del radioclub](capturas/socios-radioclub.png)
+
+**Radioclub: gestionar permisos.** El PC Radioclub marca qué puede hacer cada papel.
+
+![Gestionar permisos](capturas/gestionar-permisos.png)
+
+**Primera vez con clave del radioclub.** El socio escribe su indicativo, pega su clave y sus datos se rellenan solos; al aceptar, ya está unido al radioclub.
+
+![Primer arranque con clave del radioclub](capturas/primer-arranque-clave.png)
 
 **Radioclub: gestión de socios y cuotas.** Altas, cuotas pagadas o pendientes por año y exportación de la lista.
 
@@ -108,7 +125,7 @@ Bitácora 26 nace de la afición por la radio y se comparte gratis con todos los
 1. Descarga **[`Bitacora.26.zip`](https://github.com/ea4ixr/Bitacora-26/releases/latest/download/Bitacora.26.zip)** (la última versión).
 2. Descomprímelo donde quieras, por ejemplo en el Escritorio.
 3. Abre la carpeta **Bitacora 26** y haz doble clic en **`Bitacora 26.exe`**.
-4. La primera vez te pedirá los datos del operador: indicativo, nombre, QTH y locator.
+4. La primera vez te pedirá los datos del operador: indicativo, nombre, QTH y locator. Si tu radioclub te ha dado una clave de invitación, pulsa **Tengo clave del radioclub…**: se rellenan tus datos y te unes al radioclub sin más pasos.
 
 Tus contactos y tu configuración se guardan en **Documentos\Libro de Guardia**. Si actualizas el programa a una versión nueva, no se pierde nada.
 
@@ -122,7 +139,7 @@ Tus contactos y tu configuración se guardan en **Documentos\Libro de Guardia**.
 2. **Emisora:** en *Configuración → Configurar Emisoras*, añade tu emisora y el número de Rig que tiene en OmniRig. Después pulsa **Conectar CAT**.
 3. **Anotar un contacto:** escribe el indicativo, completa los datos y guarda.
 4. **Servicios en Internet:** en *Configuración → Configurar Servicios Online*, pon tus cuentas de QRZ, eQSL…
-5. **Radioclub:** en *Configuración → Configurar Radioclub*. Si te han dado una clave de invitación, pégala ahí.
+5. **Radioclub:** en *Configuración → Configurar Radioclub → Unirme con una clave…*, pega la clave de invitación que te ha dado tu radioclub (cada socio tiene la suya).
 
 ---
 
