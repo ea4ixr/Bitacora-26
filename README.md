@@ -25,14 +25,6 @@ También puedes ver todas las versiones y sus novedades en [Descargas](https://g
 
 ---
 
-## ☕ Apoya el proyecto
-
-Bitácora 26 nace de la afición por la radio y se comparte gratis con todos los colegas. Si te ayuda en tu estación o en tu radioclub y quieres invitarme a un café, te lo agradeceré mucho. ¡73 y buenos DX!
-
-[![Donar con PayPal](https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=GGPUFZFWW58JQ)
-
----
-
 ## ✨ Qué puede hacer
 
 ### Libro de guardia
@@ -175,7 +167,7 @@ En **Documentos\Libro de Guardia**. Haz copia de esa carpeta de vez en cuando.
 
 Los textos completos de todas las licencias van en la carpeta **licencias** del programa.
 
-**Privacidad:** los contactos que se ven en las capturas son **inventados**. Los datos que anotes en el programa se guardan en tu ordenador (y, si lo activas, en la carpeta o servidor que elijas para el radioclub). El programa solo se conecta a Internet para los servicios que tú configures, para buscar indicativos y para el mapa (OpenStreetMap, al que se envía el nombre del QTH que buscas).
+**Privacidad:** los contactos que se ven en las capturas son **inventados**. Los datos que anotes en el programa se guardan en tu ordenador (y, si lo activas, en la carpeta o servidor que elijas para el radioclub). El programa solo se conecta a Internet para los servicios que tú configures, para tu cuenta de Bitácora 26 si la creas (confirmaciones, QSL, fichas y Cluster; ver la [política de privacidad](https://bitacora26.es/privacidad.html)), para buscar indicativos y para el mapa (OpenStreetMap, al que se envía el nombre del QTH que buscas).
 
 El programa se ofrece **tal cual, sin garantías**. Úsalo bajo tu responsabilidad.
 
@@ -183,7 +175,7 @@ El programa se ofrece **tal cual, sin garantías**. Úsalo bajo tu responsabilid
 
 ## 📬 Contacto
 
-Javier Alguacil, **EA4IXR** · [QRZ.com/db/EA4IXR](https://www.qrz.com/db/EA4IXR)
+Javier Alguacil Gomar, **EA4IXR** · [info@bitacora26.es](mailto:info@bitacora26.es) · [bitacora26.es](https://bitacora26.es)
 
 Para avisar de un fallo o proponer una mejora, usa la pestaña **[Issues](https://github.com/ea4ixr/Bitacora-26/issues)** de esta página.
 
