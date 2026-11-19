@@ -1,0 +1,403 @@
+# Entidad DXCC -> continente (EU, AF, AS, NA, SA, OC, AN). Datos de k0swe/dxcc-json (Apache 2.0)
+Canada|NA
+Abu Ail Islands|AS
+Afghanistan|AS
+Agaléga and Saint Brandon|AF
+Åland Islands|EU
+Alaska|NA
+Albania|EU
+Aldabra|AF
+American Samoa|OC
+Amsterdam and Saint-Paul Islands|AF
+Andaman and Nicobar Islands|AS
+Anguilla|NA
+Antarctica|AN
+Armenia|AS
+Asiatic Russia|AS
+New Zealand Subantarctic Islands|OC
+Isla de Aves|NA
+Azerbaijan|AS
+Bajo Nuevo|NA
+Howland and Baker Islands|OC
+Balearic Islands|EU
+Palau|OC
+Blenheim Reef|AF
+Bouvet Island|AF
+British North Borneo|OC
+British Somaliland|AF
+Belarus|EU
+Panama Canal Zone|NA
+Canary Islands|AF
+Celebes and the Molucca Islands|OC
+Phoenix Islands|OC
+Ceuta and Melilla|AF
+Chagos Islands|AF
+Chatham Islands|OC
+Christmas Island|OC
+Clipperton Island|NA
+Cocos Island|NA
+Cocos (Keeling) Islands|OC
+Comoros|AF
+Crete|EU
+Crozet Islands|AF
+Daman and Diu|AS
+Desecheo Island|NA
+Desroches Island|AF
+Dodecanese|EU
+East Malaysia|OC
+Easter Island|SA
+Line Islands|OC
+Equatorial Guinea|AF
+Mexico|NA
+Eritrea|AF
+Estonia|EU
+Ethiopia|AF
+European Russia|EU
+Farquhar Group|AF
+Fernando de Noronha|SA
+French Equatorial Africa|AF
+French Indo-China|AS
+French West Africa|AF
+Bahamas|NA
+Franz Josef Land|EU
+Barbados|NA
+French Guiana|SA
+Bermuda|NA
+British Virgin Is.|NA
+Belize|NA
+French India|AS
+Kuwait/Saudi Arabia Neutral Zone|AS
+Cayman Islands|NA
+Cuba|NA
+Galápagos Islands|SA
+Dominican Republic|NA
+El Salvador|NA
+Georgia|AS
+Guatemala|NA
+Grenada|NA
+Haiti|NA
+Guadeloupe|NA
+Honduras|NA
+West Germany|EU
+Jamaica|NA
+Martinique|NA
+Bonaire and Curaçao|SA
+Nicaragua|NA
+Panama|NA
+Turks and Caicos Islands|NA
+Trinidad and Tobago|SA
+Aruba|SA
+Geyser Reef|AF
+Antigua and Barbuda|NA
+Dominica|NA
+Montserrat|NA
+Saint Lucia|NA
+Saint Vincent and the Grenadines|NA
+Glorioso Islands|AF
+Argentina|SA
+Goa|AS
+British Togoland|AF
+Guam|OC
+Bolivia|SA
+Guantanamo Bay|NA
+Guernsey|EU
+Guinea|AF
+Brazil|SA
+Guinea-Bissau|AF
+Hawaii|OC
+Heard Island and McDonald Islands|AF
+Chile|SA
+Ifni|AF
+Isle of Man|EU
+Italian Somaliland|AF
+Colombia|SA
+International Telecommunication Union Headquarters|EU
+Jan Mayen|EU
+Java|OC
+Ecuador|SA
+Jersey|EU
+Johnston Atoll|OC
+Juan de Nova and Europa Islands|AF
+Juan Fernández Islands|SA
+Kaliningrad|EU
+Kamaran Island|AS
+Karelo-Finnish Soviet Socialist Republic|EU
+Guyana|SA
+Kazakhstan|AS
+Kerguelen Islands|AF
+Paraguay|SA
+Kermadec Islands|OC
+Kingman Reef|OC
+Kyrgyzstan|AS
+Peru|SA
+South Korea|AS
+Kure Atoll|OC
+Khuriya Muriya Islands|AS
+Suriname|SA
+Falkland Islands|SA
+Lakshadweep|AS
+Laos|AS
+Uruguay|SA
+Latvia|EU
+Lithuania|EU
+Lord Howe Island|OC
+Venezuela|SA
+Azores|EU
+Australia|OC
+Maly Vysotsky Island|EU
+Macao|AS
+Macquarie Island|OC
+Yemen Arab Republic|AS
+West Malaysia|AS
+Nauru|OC
+Vanuatu|OC
+Maldives|AS
+Tonga|OC
+Malpelo Island|SA
+New Caledonia|OC
+Papua New Guinea|OC
+Manchuria|AS
+Mauritius|AF
+Mariana Islands|OC
+Märket Island|EU
+Marshall Islands|OC
+Mayotte|AF
+New Zealand|OC
+Mellish Reef|OC
+Pitcairn Islands|OC
+Micronesia|OC
+Midway Atoll|OC
+French Polynesia|OC
+Fiji|OC
+Minami-Tori-shima|OC
+Minerva Reefs|OC
+Moldova|EU
+Mount Athos|EU
+Mozambique|AF
+Navassa Island|NA
+Netherlands Borneo|OC
+Netherlands New Guinea|OC
+Solomon Islands|OC
+Newfoundland, Labrador|NA
+Niger|AF
+Niue|OC
+Norfolk Island|OC
+Samoa|OC
+North Cook Islands|OC
+Ogasawara Islands|AS
+Ryukyu Islands|AS
+Okinotorishima|AS
+Annobón|AF
+Palestine|AS
+Palmyra and Jarvis Islands|OC
+Papua Territory|OC
+Peter I Island|AN
+Portuguese Timor|OC
+Prince Edward and Marion Islands|AF
+Puerto Rico|NA
+Andorra|EU
+Revillagigedo Islands|NA
+Ascension Island|AF
+Austria|EU
+Rodrigues Island|AF
+Ruanda-Urundi|AF
+Belgium|EU
+Saar|EU
+Sable Island|NA
+Bulgaria|EU
+Saint Martin|NA
+Corsica|EU
+Cyprus|AS
+San Andrés and Providencia|NA
+Desventuradas Islands|SA
+Czechoslovakia|EU
+Sao Tome and Principe|AF
+Sarawak|OC
+Denmark|EU
+Faroe Islands|EU
+England|EU
+Finland|EU
+Sardinia|EU
+Saudi Arabia/Iraq Neutral Zone|AS
+France|EU
+Serrana Bank & Roncador Cay|NA
+East Germany|EU
+Germany|EU
+Sikkim|AS
+Somalia|AF
+Gibraltar|EU
+South Cook Islands|OC
+South Georgia Island|SA
+Greece|EU
+Greenland|NA
+South Orkney Islands|SA
+Hungary|EU
+South Sandwich Islands|SA
+South Shetland Islands|SA
+Iceland|EU
+People's Democratic Rep. of Yemen|AS
+Southern Sudan|AF
+Ireland|EU
+Sovereign Military Order of Malta|EU
+Spratly Islands|AS
+Italy|EU
+Saint Kitts and Nevis|NA
+St. Helena|AF
+Liechtenstein|EU
+St. Paul Island|NA
+Saint Peter and Saint Paul Archipelago|SA
+Luxembourg|EU
+St. Maarten, Saba, St. Eustatius|NA
+Madeira|AF
+Malta|EU
+Sumatra|OC
+Svalbard|EU
+Monaco|EU
+Swan Is.|NA
+Tajikistan|AS
+Netherlands|EU
+Tangier|AF
+Northern Ireland|EU
+Norway|EU
+Territory of New Guinea|OC
+Tibet|AS
+Poland|EU
+Tokelau|OC
+Trieste|EU
+Portugal|EU
+Trindade and Martin Vaz|SA
+Tristan da Cunha and Gough Islands|AF
+Romania|EU
+Tromelin Island|AF
+Saint Pierre and Miquelon|NA
+San Marino|EU
+Scotland|EU
+Turkmenistan|AS
+Spain|EU
+Tuvalu|OC
+Sovereign Base Areas of Akrotiri and Dhekelia|AS
+Sweden|EU
+US Virgin Islands|NA
+Uganda|AF
+Switzerland|EU
+Ukraine|EU
+United Nations Headquarters|NA
+United States of America|NA
+Uzbekistan|AS
+Viet Nam|AS
+Wales|EU
+Vatican|EU
+Serbia|EU
+Wake Island|OC
+Wallis and Futuna Islands|OC
+West Malaysia|AS
+Gilbert Islands|OC
+Western Sahara|AF
+Willis Island|OC
+Bahrain|AS
+Bangladesh|AS
+Bhutan|AS
+Zanzibar|AF
+Costa Rica|NA
+Myanmar|AS
+Cambodia|AS
+Sri Lanka|AS
+China|AS
+Hong Kong|AS
+India|AS
+Indonesia|OC
+Iran|AS
+Iraq|AS
+Israel|AS
+Japan|AS
+Jordan|AS
+Democratic People's Republic of Korea|AS
+Brunei Darussalam|OC
+Kuwait|AS
+Lebanon|AS
+Mongolia|AS
+Nepal|AS
+Oman|AS
+Pakistan|AS
+Philippines|OC
+Qatar|AS
+Saudi Arabia|AS
+Seychelles|AF
+Singapore|AS
+Djibouti|AF
+Syria|AS
+Taiwan|AS
+Thailand|AS
+Turkey|EU
+United Arab Emirates|AS
+Algeria|AF
+Angola|AF
+Botswana|AF
+Burundi|AF
+Cameroon|AF
+Central African Republic|AF
+Cape Verde|AF
+Chad|AF
+Comoros|AF
+Republic of the Congo|AF
+Democratic Republic of the Congo|AF
+Benin|AF
+Gabon|AF
+The Gambia|AF
+Ghana|AF
+Côte d'Ivoire|AF
+Kenya|AF
+Lesotho|AF
+Liberia|AF
+Libya|AF
+Madagascar|AF
+Malawi|AF
+Mali|AF
+Mauritania|AF
+Morocco|AF
+Nigeria|AF
+Zimbabwe|AF
+Réunion|AF
+Rwanda|AF
+Senegal|AF
+Sierra Leone|AF
+Rotuma Island|OC
+South Africa|AF
+Namibia|AF
+Sudan|AF
+Eswatini|AF
+Tanzania|AF
+Tunisia|AF
+Egypt|AF
+Burkina Faso|AF
+Zambia|AF
+Togo|AF
+Walvis Bay|AF
+Conway Reef|OC
+Banaba|OC
+Yemen|AS
+Penguin Is.|AF
+Croatia|EU
+Slovenia|EU
+Bosnia-Herzegovina|EU
+North Macedonia|EU
+Czech Republic|EU
+Slovakia|EU
+Pratas Island|AS
+Scarborough Shoal|AS
+Temotu Province|OC
+Austral Islands|OC
+Marquesas Islands|OC
+Palestine|AS
+Timor-Leste|OC
+Chesterfield Islands|OC
+Ducie Island|OC
+Montenegro|EU
+Swains Island|OC
+Saint Barthélemy|NA
+Curaçao|SA
+Sint Maarten|NA
+Saba and Sint Eustatius|NA
+Bonaire|SA
+South Sudan|AF
+Kosovo|EU

@@ -1,0 +1,22 @@
+BITACORA 26 - EA4IXR
+====================
+
+COMO SE USA
+  - Haz doble clic en "Bitacora 26.exe". No hace falta instalar Java.
+  - Puedes poner esta carpeta donde quieras (Escritorio, un pendrive...),
+    pero el EXE tiene que quedarse dentro de ella, junto a las carpetas
+    "app", "runtime" y "rtl-sdr".
+  - Para tenerlo a mano: boton derecho sobre "Bitacora 26.exe" >
+    Mostrar mas opciones > Enviar a > Escritorio (crear acceso directo).
+
+TUS DATOS
+  - Los contactos y la configuracion se guardan en
+    Documentos\Libro de Guardia (no dentro de esta carpeta).
+    Si cambias de version, tus datos se conservan.
+
+PARA EL CAT (leer la emisora)
+  - Hay que tener instalado OmniRig y configurado con tu emisora.
+
+PARA LA CASCADA (RTL-SDR)
+  - El receptor RTL-SDR tiene que tener puesto su driver (Zadig, WinUSB).
+  - El programa rtl_tcp ya va incluido en la carpeta "rtl-sdr".

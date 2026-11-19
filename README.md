@@ -155,7 +155,7 @@ En **Documentos\Libro de Guardia**. Haz copia de esa carpeta de vez en cuando.
 **Programas y servicios externos** (cada uno tiene sus propias condiciones de uso):
 - [QRZ.com](https://www.qrz.com) · [eQSL](https://www.eqsl.cc) · [Club Log](https://clublog.org) · [HRDLog](https://www.hrdlog.net) · [HamQTH](https://www.hamqth.com)
 - [OmniRig](https://www.dxatlas.com/omnirig/), de Afreet Software (programa gratuito, se instala aparte).
-- [WSJT-X](https://wsjt.sourceforge.io/wsjtx.html), de K1JT y colaboradores (licencia GPL, se instala aparte).
+- [WSJT-X](https://wsjt.sourceforge.io/wsjtx.html), de K1JT y colaboradores (licencia GPL v3). No hace falta: Bitácora 26 ya trae FT8, FT4 y WSPR, pero se puede usar a la vez.
 
 **Datos y componentes incluidos:**
 - Mapa: © colaboradores de [OpenStreetMap](https://www.openstreetmap.org/copyright), datos bajo licencia ODbL.
@@ -165,7 +165,16 @@ En **Documentos\Libro de Guardia**. Haz copia de esa carpeta de vez en cuando.
 - [Apache PDFBox](https://pdfbox.apache.org) (Apache 2.0), [SQLite JDBC](https://github.com/xerial/sqlite-jdbc) (Apache 2.0) y [JACOB](https://github.com/freemansoft/jacob-project) (LGPL).
 - [rtl-sdr / rtl_tcp](https://osmocom.org/projects/rtl-sdr/wiki) de Osmocom (licencia GPL 2.0).
 
+- FT8, FT4 y WSPR: pasados a Java a partir de [WSJT-X](https://wsjt.sourceforge.io/) (K1JT y colaboradores, GPL v3) y [ft8_lib](https://github.com/kgoba/ft8_lib) (Kārlis Goba, MIT).
+- RTTY: traducción a Java de la recepción de [MMTTY](https://github.com/n5ac/mmtty) (JE3HHT y Nobuyuki Oba, LGPL v3).
+
 Los textos completos de todas las licencias van en la carpeta **licencias** del programa.
+
+## 📜 Licencia y código fuente
+
+Bitácora 26 es **software libre** con licencia **GNU GPL v3** ([LICENSE](LICENSE)), con los [términos adicionales](codigo/TERMINOS-ADICIONALES.txt) de conservación de la autoría.
+
+El **código fuente completo** de cada versión está en la carpeta [**codigo**](codigo). Para compilarlo hacen falta JDK 25 y Maven; los pasos están en [codigo/LEEME.txt](codigo/LEEME.txt). Créditos de las piezas ajenas: [codigo/CREDITOS.txt](codigo/CREDITOS.txt).
 
 **Privacidad:** los contactos que se ven en las capturas son **inventados**. Los datos que anotes en el programa se guardan en tu ordenador (y, si lo activas, en la carpeta o servidor que elijas para el radioclub). El programa solo se conecta a Internet para los servicios que tú configures, para tu cuenta de Bitácora 26 si la creas (confirmaciones, QSL, fichas y Cluster; ver la [política de privacidad](https://bitacora26.es/privacidad.html)), para buscar indicativos y para el mapa (OpenStreetMap, al que se envía el nombre del QTH que buscas).
 

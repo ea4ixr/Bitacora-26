@@ -1,0 +1,61 @@
+BITÁCORA 26 (Libro de Guardia) — LICENCIA Y CRÉDITOS
+=====================================================
+
+Bitácora 26 es software libre: se puede usar, copiar, estudiar, modificar y
+repartir según la Licencia Pública General de GNU, versión 3 (GPL v3).
+El texto completo está en el fichero LICENSE.txt.
+
+    Copyright (C) 2025-2026 Javier Alguacil (EA4IXR)
+
+    Este programa es software libre: puede redistribuirlo y/o modificarlo
+    bajo los términos de la Licencia Pública General de GNU publicada por la
+    Free Software Foundation, versión 3.
+    Este programa se distribuye con la esperanza de que sea útil, pero SIN
+    NINGUNA GARANTÍA. Consulte la Licencia Pública General de GNU para más
+    detalles.
+
+CRÉDITOS DE PIEZAS AJENAS
+-------------------------
+
+* Modos digitales FT8 y FT4 (carpeta src/main/java/digitales):
+  pasados a Java a partir de WSJT-X, de Joe Taylor (K1JT), Steve Franke (K9AN),
+  Bill Somerville (G4WJS) y el resto del equipo de desarrollo de WSJT-X.
+  WSJT-X se distribuye con licencia GPL v3. https://wsjt.sourceforge.io/
+  También se ha consultado ft8_lib, de Kārlis Goba (YL3JG), con esta licencia:
+
+    MIT License
+
+    Copyright (c) 2018 Kārlis Goba
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+
+* WSPR (carpeta src/main/java/digitales/wspr): pasado a Java a partir de WSJT-X
+  (K1JT, K9AN, KA9Q y colaboradores), licencia GPL v3.
+
+* RTTY (carpeta src/main/java/digitales/rtty): traducción a Java de la parte de
+  recepción de MMTTY, de Makoto Mori (JE3HHT) y Nobuyuki Oba.
+  Licencia GNU LGPL v3 (licencias/LGPL-3.0.txt). https://github.com/n5ac/mmtty
+
+* JACOB (Java COM Bridge), para hablar con OmniRig: licencia LGPL.
+* Apache PDFBox, para los diplomas en PDF: licencia Apache 2.0.
+* SQLite JDBC (Xerial), para la base de datos: licencia Apache 2.0.
+* Apache FontBox y Apache Commons Logging (los usa PDFBox): licencia Apache 2.0.
+* SLF4J (lo usa SQLite JDBC): licencia MIT.
+* OmniRig (de Alex Shovkoplyas, VE3NEA) NO va dentro de Bitácora 26: cada
+  usuario lo instala aparte.

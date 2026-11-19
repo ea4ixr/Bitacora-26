@@ -1,0 +1,89 @@
+﻿BITÁCORA 26 - LICENCIAS DE LOS COMPONENTES INCLUIDOS
+=====================================================
+
+Bitácora 26 es un programa gratuito de Javier Alguacil, EA4IXR.
+Se ofrece TAL CUAL, SIN GARANTÍAS de ningún tipo.
+
+Junto con el programa se incluyen componentes de otros autores. Cada uno
+mantiene su propia licencia, cuyo texto está en esta carpeta:
+
+1) rtl-sdr / rtl_tcp (carpeta "rtl-sdr": rtl_tcp.exe, rtl_test.exe, rtlsdr.dll)
+   Autor: proyecto Osmocom (Steve Markgraf y colaboradores).
+   Licencia: GNU General Public License versión 2 (GPL-2.0.txt).
+   Se incluyen sin modificar. Su código fuente está disponible en:
+     https://gitea.osmocom.org/sdr/rtl-sdr
+     https://osmocom.org/projects/rtl-sdr/wiki
+   Si no puedes conseguirlo ahí, pídeselo al autor de Bitácora 26 y te lo
+   facilitará.
+
+2) pthreadVC2.dll (carpeta "rtl-sdr")
+   Autor: proyecto pthreads-win32.
+   Licencia: GNU Lesser General Public License 2.1 (LGPL-2.1.txt).
+   Código fuente: https://sourceware.org/pthreads-win32/
+
+3) msvcr100.dll (carpeta "rtl-sdr")
+   Biblioteca de Microsoft Visual C++ 2010, redistribuible según la
+   licencia de Microsoft para los paquetes redistribuibles de Visual C++.
+
+4) JACOB (Java COM Bridge) - para comunicar con OmniRig
+   Licencia: GNU Lesser General Public License 2.1 (LGPL-2.1.txt).
+   Código fuente: https://github.com/freemansoft/jacob-project
+
+5) Apache PDFBox, FontBox y PDFBox-IO - para crear los diplomas en PDF
+   Licencia: Apache License 2.0 (Apache-2.0.txt). Avisos: NOTICE-Apache.txt
+   https://pdfbox.apache.org
+
+6) Apache Commons Logging
+   Licencia: Apache License 2.0 (Apache-2.0.txt). Avisos: NOTICE-Apache.txt
+
+7) SQLite JDBC (xerial) - base de datos
+   Licencia: Apache License 2.0 (Apache-2.0.txt).
+   https://github.com/xerial/sqlite-jdbc
+
+8) SLF4J API
+   Licencia: MIT (MIT-slf4j.txt).
+
+9) Banderas de los países: flag-icons, de Panayiotis Lipiridis
+   Licencia: MIT (MIT-flag-icons.txt).
+   https://github.com/lipis/flag-icons
+
+10) Prefijos DXCC: derivados de k0swe/dxcc-json
+    Licencia: Apache License 2.0 (Apache-2.0.txt), basado en la lista DXCC
+    de la ARRL. https://github.com/k0swe/dxcc-json
+
+11) Contornos del mapa del mundo: Natural Earth (dominio público).
+    https://www.naturalearthdata.com
+
+12) Entorno de Java incluido (carpeta "runtime")
+    OpenJDK, licencia GNU GPL v2 con "Classpath Exception".
+    Sus avisos legales están en la carpeta runtime\legal.
+
+13) Modos digitales FT8, FT4 y WSPR: pasados a Java a partir de WSJT-X
+    (K1JT y colaboradores). Licencia GNU GPL v3 (LICENSE.txt).
+    https://wsjt.sourceforge.io/  ·  También ft8_lib, de Kārlis Goba
+    (licencia MIT, texto en CREDITOS.txt).
+
+14) RTTY: traducción a Java de la recepción de MMTTY (Makoto Mori, JE3HHT,
+    y Nobuyuki Oba). Licencia GNU LGPL v3 (LGPL-3.0.txt).
+    https://github.com/n5ac/mmtty
+
+CÓDIGO FUENTE DE BITÁCORA 26
+- Bitácora 26 es software libre, licencia GNU GPL v3 (LICENSE.txt), con los
+  términos adicionales de TERMINOS-ADICIONALES.txt.
+- Su código fuente completo está en: https://github.com/ea4ixr/Bitacora-26
+  (carpeta "codigo").
+
+SERVICIOS QUE SE USAN POR INTERNET (no se incluyen en el programa)
+- Mapas: © colaboradores de OpenStreetMap, datos bajo licencia ODbL.
+  https://www.openstreetmap.org/copyright
+- QRZ.com, eQSL, Club Log, HRDLog y HamQTH: cada usuario usa su propia
+  cuenta y debe aceptar las condiciones de cada servicio.
+
+PROGRAMAS COMPATIBLES (se instalan aparte, no se incluyen)
+- OmniRig, de Afreet Software: https://www.dxatlas.com/omnirig/
+- WSJT-X, de K1JT y colaboradores (GPL): https://wsjt.sourceforge.io/
+  (no hace falta: Bitácora 26 ya trae FT8, FT4 y WSPR; se puede usar a la vez)
+
+Bitácora 26 no está afiliado, patrocinado ni respaldado por ninguno de los
+programas o servicios nombrados. Sus nombres son marcas de sus respectivos
+propietarios y se mencionan solo para indicar compatibilidad.

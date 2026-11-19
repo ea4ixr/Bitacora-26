@@ -1,0 +1,27 @@
+BITACORA 26 (EA4IXR) - COMO GENERAR LA APLICACION PARA OTROS PCs
+===================================================================
+
+PASO 1 - Crear el JAR con Maven (en IntelliJ)
+  1. Abre este proyecto en IntelliJ (File > Open > carpeta Librodeguardia).
+  2. Abre el panel "Maven" (borde derecho de IntelliJ).
+  3. Lifecycle > doble clic en "clean" y despues doble clic en "package".
+  4. Debe aparecer BUILD SUCCESS y el archivo:
+     target\generador_PDF-1.0-SNAPSHOT-jar-with-dependencies.jar
+
+PASO 2 - Crear el EXE
+  1. Haz doble clic en empaquetar.bat
+  2. Si dice que no encuentra jpackage, abre el .bat con el Bloc de notas y
+     rellena la linea "set JDK_HOME=" con la carpeta de tu JDK 25.
+  3. Al terminar tendras:
+       salida\Bitacora 26\Bitacora 26.exe (para probar en tu PC)
+       salida\Bitacora 26.zip               (para pasar a otros PCs)
+
+EN EL OTRO ORDENADOR
+  - Descomprimir el ZIP donde se quiera y ejecutar "Bitacora 26.exe".
+    No hace falta instalar Java. OmniRig si debe estar instalado para el CAT.
+  - La base de datos y la configuracion se crean solas en
+    Documentos\Libro de Guardia de cada usuario (no viajan con el ZIP).
+
+SI ALGO FALLA
+  - En empaquetar.bat pon  set CONSOLE_OPT=--win-console  y vuelve a generar:
+    se abrira una ventana con los mensajes de error al lanzar el programa.

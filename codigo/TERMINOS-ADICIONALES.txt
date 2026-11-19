@@ -1,0 +1,20 @@
+Bitácora 26 - Términos adicionales a la licencia GNU GPL versión 3
+(según el apartado 7, letra b, de la GPL v3)
+
+Copyright (C) Javier Alguacil Gomar (EA4IXR)
+
+Además de la GNU General Public License versión 3 (archivo LICENSE.txt), se aplica este término adicional:
+
+1. Conservación de la autoría. Quien copie, modifique o distribuya Bitácora 26, o una obra basada en él,
+   debe conservar sin cambios y visibles los avisos de autoría "Hecho con Bitácora 26" (y su enlace a
+   bitacora26.es) que muestra el buscador de diplomas para webs (diplomas.html) y cualquier otro aviso
+   de autoría que el programa muestre.
+
+-------------------------------------------------------------------------------------------------------
+
+Bitácora 26 - Additional terms to the GNU GPL version 3 licence (section 7(b) of GPLv3)
+
+1. Preservation of author attributions. Anyone who copies, modifies or distributes Bitácora 26, or a work
+   based on it, must keep unchanged and visible the "Hecho con Bitácora 26" (Made with Bitácora 26)
+   attribution notices (and their link to bitacora26.es) shown by the award search for websites
+   (diplomas.html) and any other author attribution the program displays.

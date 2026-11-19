@@ -1,0 +1,840 @@
+# Prefijos DXCC -> codigo de pais (ISO) y nombre de la entidad
+# Datos derivados de k0swe/dxcc-json (Apache License 2.0), basado en la lista DXCC de la ARRL
+# Formato: PREFIJO|ISO|ENTIDAD   (se usa el prefijo mas largo que coincida)
+1A|ZZ|Sovereign Military Order of Malta
+2E|GB|England
+2I|XI|Northern Ireland
+2W|GB|Wales
+3A|MC|Monaco
+3B6|MU|Agaléga and Saint Brandon
+3B7|MU|Agaléga and Saint Brandon
+3B8|MU|Mauritius
+3B9|MU|Rodrigues Island
+3C|GQ|Equatorial Guinea
+3C0|GQ|Annobón
+3D2|FJ|Rotuma Island
+3DA|SZ|Eswatini
+3G|CL|Chile
+3V|TN|Tunisia
+3W|VN|Viet Nam
+3X|GN|Guinea
+3Y|BV|Peter I Island
+3Z|PL|Poland
+4D|PH|Philippines
+4E|PH|Philippines
+4F|PH|Philippines
+4G|PH|Philippines
+4H|PH|Philippines
+4I|PH|Philippines
+4J|AZ|Azerbaijan
+4K|AZ|Azerbaijan
+4K1|AQ|South Shetland Islands
+4L|GE|Georgia
+4M|VE|Venezuela
+4N|RS|Serbia
+4O|ME|Montenegro
+4S|LK|Sri Lanka
+4U|UN|United Nations Headquarters
+4W|TL|Timor-Leste
+4X|IL|Israel
+4Z|IL|Israel
+5A|LY|Libya
+5B|CY|Cyprus
+5C|MA|Morocco
+5D|MA|Morocco
+5E|MA|Morocco
+5H|TZ|Tanzania
+5I|TZ|Tanzania
+5J|CO|Colombia
+5K|CO|Colombia
+5N|NG|Nigeria
+5P|DK|Denmark
+5Q|DK|Denmark
+5R|MG|Madagascar
+5T|MR|Mauritania
+5U|NE|Niger
+5V|TG|Togo
+5W|WS|Samoa
+5X|UG|Uganda
+5Y|KE|Kenya
+5Z|KE|Kenya
+6K|KR|South Korea
+6L|KR|South Korea
+6M|KR|South Korea
+6N|KR|South Korea
+6O|SO|Somalia
+6V|SN|Senegal
+6W|SN|Senegal
+6Y|JM|Jamaica
+7J|JP|Japan
+7K|JP|Japan
+7L|JP|Japan
+7M|JP|Japan
+7N|JP|Japan
+7O|YE|Yemen
+7P|LS|Lesotho
+7Q|MW|Malawi
+7S|SE|Sweden
+7T|DZ|Algeria
+7U|DZ|Algeria
+7V|DZ|Algeria
+7W|DZ|Algeria
+7X|DZ|Algeria
+7Y|DZ|Algeria
+7Z|SA|Saudi Arabia
+8A|ID|Indonesia
+8B|ID|Indonesia
+8C|ID|Indonesia
+8D|ID|Indonesia
+8E|ID|Indonesia
+8F|ID|Indonesia
+8G|ID|Indonesia
+8H|ID|Indonesia
+8I|ID|Indonesia
+8N|JP|Japan
+8P|BB|Barbados
+8Q|MV|Maldives
+8R|GY|Guyana
+8S|SE|Sweden
+9A|HR|Croatia
+9G|GH|Ghana
+9H|MT|Malta
+9I|ZM|Zambia
+9J|ZM|Zambia
+9K|KW|Kuwait
+9L|SL|Sierra Leone
+9M2|MY|West Malaysia
+9M4|MY|West Malaysia
+9M6|MY|East Malaysia
+9M8|MY|East Malaysia
+9N|NP|Nepal
+9Q|CD|Democratic Republic of the Congo
+9R|CD|Democratic Republic of the Congo
+9S|CD|Democratic Republic of the Congo
+9T|CD|Democratic Republic of the Congo
+9U|BI|Burundi
+9V|SG|Singapore
+9X|RW|Rwanda
+9Y|TT|Trinidad and Tobago
+9Z|TT|Trinidad and Tobago
+A2|BW|Botswana
+A3|TO|Tonga
+A4|OM|Oman
+A5|BT|Bhutan
+A6|AE|United Arab Emirates
+A7|QA|Qatar
+A9|BH|Bahrain
+AA|US|United States of America
+AB|US|United States of America
+AC|US|United States of America
+AD|US|United States of America
+AE|US|United States of America
+AF|US|United States of America
+AG|US|United States of America
+AH|US|United States of America
+AI|US|United States of America
+AJ|US|United States of America
+AK|US|United States of America
+AL|US|Alaska
+AM|ES|Spain
+AN|ES|Spain
+AO|ES|Spain
+AP|PK|Pakistan
+AT|IN|India
+AU|IN|India
+AX|AU|Australia
+AY|AR|Argentina
+AZ|AR|Argentina
+B|CN|China
+BS7|CN|Scarborough Shoal
+BU|TW|Taiwan
+BV|TW|Taiwan
+BV9P|TW|Pratas Island
+BW|TW|Taiwan
+BX|TW|Taiwan
+C2|NR|Nauru
+C3|AD|Andorra
+C4|CY|Cyprus
+C5|GM|The Gambia
+C6|BS|Bahamas
+C8|MZ|Mozambique
+C9|MZ|Mozambique
+CA|CL|Chile
+CB|CL|Chile
+CC|CL|Chile
+CD|CL|Chile
+CE|CL|Chile
+CE0|CL|Juan Fernández Islands
+CE9|AQ|South Shetland Islands
+CF|CA|Canada
+CG|CA|Canada
+CH|CA|Canada
+CI|CA|Canada
+CJ|CA|Canada
+CK|CA|Canada
+CL|CU|Cuba
+CM|CU|Cuba
+CN|MA|Morocco
+CO|CU|Cuba
+CP|BO|Bolivia
+CQ|PT|Portugal
+CR|PT|Portugal
+CS|PT|Portugal
+CT|PT|Portugal
+CT3|PT|Madeira
+CU|PT|Azores
+CV|UY|Uruguay
+CW|UY|Uruguay
+CX|UY|Uruguay
+CY0|CA|Sable Island
+CY9|CA|St. Paul Island
+D2|AO|Angola
+D3|AO|Angola
+D4|CV|Cape Verde
+D6|KM|Comoros
+D7|KR|South Korea
+D8|KR|South Korea
+DA|DE|Germany
+DB|DE|Germany
+DC|DE|Germany
+DD|DE|Germany
+DE|DE|Germany
+DF|DE|Germany
+DG|DE|Germany
+DH|DE|Germany
+DI|DE|Germany
+DJ|DE|Germany
+DK|DE|Germany
+DL|DE|Germany
+DM|DE|Germany
+DN|DE|Germany
+DO|DE|Germany
+DP|DE|Germany
+DQ|DE|Germany
+DR|DE|Germany
+DS|KR|South Korea
+DT|KR|South Korea
+DU|PH|Philippines
+DV|PH|Philippines
+DW|PH|Philippines
+DX|PH|Philippines
+DY|PH|Philippines
+DZ|PH|Philippines
+E|TF|Juan de Nova and Europa Islands
+E2|TH|Thailand
+E3|ER|Eritrea
+E4|PS|Palestine
+E5|CK|South Cook Islands
+E6|NU|Niue
+E7|BA|Bosnia-Herzegovina
+EA|ES|Spain
+EA6|ES|Balearic Islands
+EA8|ES|Canary Islands
+EA9|ES|Ceuta and Melilla
+EB|ES|Spain
+EB6|ES|Balearic Islands
+EB8|ES|Canary Islands
+EB9|ES|Ceuta and Melilla
+EC|ES|Spain
+EC6|ES|Balearic Islands
+EC8|ES|Canary Islands
+EC9|ES|Ceuta and Melilla
+ED|ES|Spain
+ED6|ES|Balearic Islands
+ED8|ES|Canary Islands
+ED9|ES|Ceuta and Melilla
+EE|ES|Spain
+EE6|ES|Balearic Islands
+EE8|ES|Canary Islands
+EE9|ES|Ceuta and Melilla
+EF|ES|Spain
+EF6|ES|Balearic Islands
+EF8|ES|Canary Islands
+EF9|ES|Ceuta and Melilla
+EG|ES|Spain
+EG6|ES|Balearic Islands
+EG8|ES|Canary Islands
+EG9|ES|Ceuta and Melilla
+EH|ES|Spain
+EH6|ES|Balearic Islands
+EH8|ES|Canary Islands
+EH9|ES|Ceuta and Melilla
+EI|IE|Ireland
+EJ|IE|Ireland
+EK|AM|Armenia
+EL|LR|Liberia
+EM|UA|Ukraine
+EN|UA|Ukraine
+EO|UA|Ukraine
+EP|IR|Iran
+EQ|IR|Iran
+ER|MD|Moldova
+ES|EE|Estonia
+ET|ET|Ethiopia
+EU|BY|Belarus
+EV|BY|Belarus
+EW|BY|Belarus
+EX|KG|Kyrgyzstan
+EY|TJ|Tajikistan
+EZ|TM|Turkmenistan
+F|FR|France
+FG|GP|Guadeloupe
+FH|YT|Mayotte
+FJ|FR|Saint Barthélemy
+FK|NC|New Caledonia
+FM|MQ|Martinique
+FO|PF|Marquesas Islands
+FP|PM|Saint Pierre and Miquelon
+FR|FR|Réunion
+FS|FR|Saint Martin
+FW|WF|Wallis and Futuna Islands
+FY|GF|French Guiana
+G|GB|England
+GC|GB|Wales
+GD|IM|Isle of Man
+GH|JE|Jersey
+GI|XI|Northern Ireland
+GJ|JE|Jersey
+GM|GB|Scotland
+GN|XI|Northern Ireland
+GP|GG|Guernsey
+GS|GB|Scotland
+GT|IM|Isle of Man
+GU|GG|Guernsey
+GW|GB|Wales
+GX|GB|England
+H4|SB|Solomon Islands
+H40|SB|Temotu Province
+H6|NI|Nicaragua
+H7|NI|Nicaragua
+HA|HU|Hungary
+HB|CH|Switzerland
+HB0|LI|Liechtenstein
+HC|EC|Ecuador
+HC8|EC|Galápagos Islands
+HD|EC|Ecuador
+HD8|EC|Galápagos Islands
+HF|PL|Poland
+HF0|AQ|South Shetland Islands
+HG|HU|Hungary
+HH|HT|Haiti
+HI|DO|Dominican Republic
+HJ|CO|Colombia
+HK|CO|Colombia
+HK0|CO|San Andrés and Providencia
+HL|KR|South Korea
+HO|PA|Panama
+HP|PA|Panama
+HQ|HN|Honduras
+HR|HN|Honduras
+HS|TH|Thailand
+HT|NI|Nicaragua
+HU|SV|El Salvador
+HV|VA|Vatican
+HW|FR|France
+HX|FR|France
+HY|FR|France
+HZ|SA|Saudi Arabia
+I|IT|Italy
+IM0|IT|Sardinia
+IS0|IT|Sardinia
+J2|DJ|Djibouti
+J3|GD|Grenada
+J4|GR|Greece
+J45|GR|Dodecanese
+J49|GR|Crete
+J5|GW|Guinea-Bissau
+J6|LC|Saint Lucia
+J7|DM|Dominica
+J8|VC|Saint Vincent and the Grenadines
+JA|JP|Japan
+JB|JP|Japan
+JC|JP|Japan
+JD|JP|Japan
+JD1|JP|Ogasawara Islands
+JE|JP|Japan
+JF|JP|Japan
+JG|JP|Japan
+JH|JP|Japan
+JI|JP|Japan
+JJ|JP|Japan
+JK|JP|Japan
+JL|JP|Japan
+JM|JP|Japan
+JN|JP|Japan
+JO|JP|Japan
+JP|JP|Japan
+JQ|JP|Japan
+JR|JP|Japan
+JS|JP|Japan
+JT|MN|Mongolia
+JU|MN|Mongolia
+JV|MN|Mongolia
+JW|SJ|Svalbard
+JX|SJ|Jan Mayen
+JY|JO|Jordan
+K|US|United States of America
+KC4|AQ|Antarctica
+KG4|US|Guantanamo Bay
+KH0|MP|Mariana Islands
+KH1|UM|Howland and Baker Islands
+KH2|GU|Guam
+KH3|US|Johnston Atoll
+KH4|US|Midway Atoll
+KH5|US|Palmyra and Jarvis Islands
+KH6|US|Hawaii
+KH7|US|Hawaii
+KH7K|US|Kure Atoll
+KH8|AS|Swains Island
+KH9|US|Wake Island
+KL|US|Alaska
+KP1|US|Navassa Island
+KP2|VI|US Virgin Islands
+KP4|PR|Puerto Rico
+KP5|PR|Desecheo Island
+LA|NO|Norway
+LB|NO|Norway
+LC|NO|Norway
+LD|NO|Norway
+LE|NO|Norway
+LF|NO|Norway
+LG|NO|Norway
+LH|NO|Norway
+LI|NO|Norway
+LJ|NO|Norway
+LK|NO|Norway
+LL|NO|Norway
+LM|NO|Norway
+LN|NO|Norway
+LO|AR|Argentina
+LP|AR|Argentina
+LQ|AR|Argentina
+LR|AR|Argentina
+LS|AR|Argentina
+LT|AR|Argentina
+LU|AR|Argentina
+LV|AR|Argentina
+LW|AR|Argentina
+LX|LU|Luxembourg
+LY|LT|Lithuania
+LZ|BG|Bulgaria
+M|GB|England
+N|US|United States of America
+NL|US|Alaska
+NP4|PR|Puerto Rico
+OA|PE|Peru
+OB|PE|Peru
+OC|PE|Peru
+OD|LB|Lebanon
+OE|AT|Austria
+OF|FI|Finland
+OG|FI|Finland
+OH|FI|Finland
+OH0|AX|Åland Islands
+OI|FI|Finland
+OJ0|ZZ|Märket Island
+OK|CZ|Czech Republic
+OL|CZ|Czech Republic
+OM|SK|Slovakia
+ON|BE|Belgium
+OO|BE|Belgium
+OP|BE|Belgium
+OQ|BE|Belgium
+OR|BE|Belgium
+OS|BE|Belgium
+OT|BE|Belgium
+OU|DK|Denmark
+OV|DK|Denmark
+OW|DK|Denmark
+OX|GL|Greenland
+OY|FO|Faroe Islands
+OZ|DK|Denmark
+P2|PG|Papua New Guinea
+P3|CY|Cyprus
+P4|AW|Aruba
+P5|KP|Democratic People's Republic of Korea
+PA|NL|Netherlands
+PB|NL|Netherlands
+PC|NL|Netherlands
+PD|NL|Netherlands
+PE|NL|Netherlands
+PF|NL|Netherlands
+PG|NL|Netherlands
+PH|NL|Netherlands
+PI|NL|Netherlands
+PJ2|CW|Curaçao
+PJ4|BQ|Bonaire
+PJ5|BQ|Saba and Sint Eustatius
+PJ6|BQ|Saba and Sint Eustatius
+PJ7|SX|Sint Maarten
+PP|BR|Brazil
+PP0F|BR|Fernando de Noronha
+PP0S|BR|Saint Peter and Saint Paul Archipelago
+PP0T|BR|Trindade and Martin Vaz
+PQ|BR|Brazil
+PQ0F|BR|Fernando de Noronha
+PQ0S|BR|Saint Peter and Saint Paul Archipelago
+PQ0T|BR|Trindade and Martin Vaz
+PR|BR|Brazil
+PR0F|BR|Fernando de Noronha
+PR0S|BR|Saint Peter and Saint Paul Archipelago
+PR0T|BR|Trindade and Martin Vaz
+PS|BR|Brazil
+PS0F|BR|Fernando de Noronha
+PS0S|BR|Saint Peter and Saint Paul Archipelago
+PS0T|BR|Trindade and Martin Vaz
+PT|BR|Brazil
+PT0F|BR|Fernando de Noronha
+PT0S|BR|Saint Peter and Saint Paul Archipelago
+PT0T|BR|Trindade and Martin Vaz
+PU|BR|Brazil
+PU0F|BR|Fernando de Noronha
+PU0S|BR|Saint Peter and Saint Paul Archipelago
+PU0T|BR|Trindade and Martin Vaz
+PV|BR|Brazil
+PV0F|BR|Fernando de Noronha
+PV0S|BR|Saint Peter and Saint Paul Archipelago
+PV0T|BR|Trindade and Martin Vaz
+PW|BR|Brazil
+PW0F|BR|Fernando de Noronha
+PW0S|BR|Saint Peter and Saint Paul Archipelago
+PW0T|BR|Trindade and Martin Vaz
+PX|BR|Brazil
+PX0F|BR|Fernando de Noronha
+PX0S|BR|Saint Peter and Saint Paul Archipelago
+PX0T|BR|Trindade and Martin Vaz
+PY|BR|Brazil
+PY0F|BR|Fernando de Noronha
+PY0S|BR|Saint Peter and Saint Paul Archipelago
+PY0T|BR|Trindade and Martin Vaz
+PZ|SR|Suriname
+RA|RU|European Russia
+RA2|RU|Kaliningrad
+RB|RU|European Russia
+RC|RU|European Russia
+RD|RU|European Russia
+RE|RU|European Russia
+RF|RU|European Russia
+RG|RU|European Russia
+RH|RU|European Russia
+RI|RU|European Russia
+RJ|RU|European Russia
+RK|RU|European Russia
+RL|RU|European Russia
+RM|RU|European Russia
+RN|RU|European Russia
+RO|RU|European Russia
+RP|RU|European Russia
+RQ|RU|European Russia
+RR|RU|European Russia
+RS|RU|European Russia
+RT|RU|European Russia
+RU|RU|European Russia
+RV|RU|European Russia
+RW|RU|European Russia
+RX|RU|European Russia
+RY|RU|European Russia
+RZ|RU|European Russia
+S0|EH|Western Sahara
+S2|BD|Bangladesh
+S5|SI|Slovenia
+S7|SC|Seychelles
+S9|ST|Sao Tome and Principe
+SA|SE|Sweden
+SB|SE|Sweden
+SC|SE|Sweden
+SD|SE|Sweden
+SE|SE|Sweden
+SF|SE|Sweden
+SG|SE|Sweden
+SH|SE|Sweden
+SI|SE|Sweden
+SJ|SE|Sweden
+SK|SE|Sweden
+SL|SE|Sweden
+SM|SE|Sweden
+SN|PL|Poland
+SO|PL|Poland
+SP|PL|Poland
+SQ|PL|Poland
+SR|PL|Poland
+ST|SD|Sudan
+SU|EG|Egypt
+SV|GR|Greece
+SV5|GR|Dodecanese
+SV9|GR|Crete
+SW|GR|Greece
+SX|GR|Greece
+SY|GR|Greece
+SZ|GR|Greece
+T2|TV|Tuvalu
+T30|KI|Gilbert Islands
+T31|KI|Phoenix Islands
+T32|KI|Line Islands
+T33|KI|Banaba
+T4|CU|Cuba
+T5|SO|Somalia
+T6|AF|Afghanistan
+T7|SM|San Marino
+T8|PW|Palau
+TA|TR|Turkey
+TB|TR|Turkey
+TC|TR|Turkey
+TD|GT|Guatemala
+TE|CR|Costa Rica
+TF|IS|Iceland
+TG|GT|Guatemala
+TH|FR|France
+TI|CR|Costa Rica
+TI9|CR|Cocos Island
+TJ|CM|Cameroon
+TK|FR|Corsica
+TL|CF|Central African Republic
+TM|FR|France
+TN|CG|Republic of the Congo
+TO|TF|Juan de Nova and Europa Islands
+TP|FR|France
+TQ|FR|France
+TR|GA|Gabon
+TT|TD|Chad
+TU|CI|Côte d'Ivoire
+TV|FR|France
+TW|FR|France
+TX|FR|France
+TY|BJ|Benin
+TZ|ML|Mali
+UA0|RU|Asiatic Russia
+UA1|RU|European Russia
+UA2|RU|European Russia
+UA3|RU|European Russia
+UA4|RU|European Russia
+UA5|RU|European Russia
+UA6|RU|European Russia
+UA7|RU|European Russia
+UA8|RU|Asiatic Russia
+UA9|RU|Asiatic Russia
+UB0|RU|Asiatic Russia
+UB1|RU|European Russia
+UB2|RU|European Russia
+UB3|RU|European Russia
+UB4|RU|European Russia
+UB5|RU|European Russia
+UB6|RU|European Russia
+UB7|RU|European Russia
+UB8|RU|Asiatic Russia
+UB9|RU|Asiatic Russia
+UC0|RU|Asiatic Russia
+UC1|RU|European Russia
+UC2|RU|European Russia
+UC3|RU|European Russia
+UC4|RU|European Russia
+UC5|RU|European Russia
+UC6|RU|European Russia
+UC7|RU|European Russia
+UC8|RU|Asiatic Russia
+UC9|RU|Asiatic Russia
+UD0|RU|Asiatic Russia
+UD1|RU|European Russia
+UD2|RU|European Russia
+UD3|RU|European Russia
+UD4|RU|European Russia
+UD5|RU|European Russia
+UD6|RU|European Russia
+UD7|RU|European Russia
+UD8|RU|Asiatic Russia
+UD9|RU|Asiatic Russia
+UE0|RU|Asiatic Russia
+UE1|RU|European Russia
+UE2|RU|European Russia
+UE3|RU|European Russia
+UE4|RU|European Russia
+UE5|RU|European Russia
+UE6|RU|European Russia
+UE7|RU|European Russia
+UE8|RU|Asiatic Russia
+UE9|RU|Asiatic Russia
+UF0|RU|Asiatic Russia
+UF1|RU|European Russia
+UF2|RU|European Russia
+UF3|RU|European Russia
+UF4|RU|European Russia
+UF5|RU|European Russia
+UF6|RU|European Russia
+UF7|RU|European Russia
+UF8|RU|Asiatic Russia
+UF9|RU|Asiatic Russia
+UG0|RU|Asiatic Russia
+UG1|RU|European Russia
+UG2|RU|European Russia
+UG3|RU|European Russia
+UG4|RU|European Russia
+UG5|RU|European Russia
+UG6|RU|European Russia
+UG7|RU|European Russia
+UG8|RU|Asiatic Russia
+UG9|RU|Asiatic Russia
+UH0|RU|Asiatic Russia
+UH1|RU|European Russia
+UH2|RU|European Russia
+UH3|RU|European Russia
+UH4|RU|European Russia
+UH5|RU|European Russia
+UH6|RU|European Russia
+UH7|RU|European Russia
+UH8|RU|Asiatic Russia
+UH9|RU|Asiatic Russia
+UI0|RU|Asiatic Russia
+UI1|RU|European Russia
+UI2|RU|European Russia
+UI3|RU|European Russia
+UI4|RU|European Russia
+UI5|RU|European Russia
+UI6|RU|European Russia
+UI7|RU|European Russia
+UI8|RU|Asiatic Russia
+UI9|RU|Asiatic Russia
+UJ|UZ|Uzbekistan
+UK|UZ|Uzbekistan
+UL|UZ|Uzbekistan
+UM|UZ|Uzbekistan
+UN|KZ|Kazakhstan
+UO|KZ|Kazakhstan
+UP|KZ|Kazakhstan
+UQ|KZ|Kazakhstan
+UR|UA|Ukraine
+US|UA|Ukraine
+UT|UA|Ukraine
+UU|UA|Ukraine
+UV|UA|Ukraine
+UW|UA|Ukraine
+UX|UA|Ukraine
+UY|UA|Ukraine
+UZ|UA|Ukraine
+V2|AG|Antigua and Barbuda
+V3|BZ|Belize
+V4|KN|Saint Kitts and Nevis
+V5|NA|Namibia
+V6|FM|Micronesia
+V7|MH|Marshall Islands
+V8|BN|Brunei Darussalam
+VA|CA|Canada
+VB|CA|Canada
+VC|CA|Canada
+VD|CA|Canada
+VE|CA|Canada
+VF|CA|Canada
+VG|CA|Canada
+VH|AU|Australia
+VI|AU|Australia
+VJ|AU|Australia
+VK|AU|Australia
+VK0|HM|Heard Island and McDonald Islands
+VK9C|CC|Cocos (Keeling) Islands
+VK9L|AU|Lord Howe Island
+VK9M|AU|Mellish Reef
+VK9N|AU|Norfolk Island
+VK9W|AU|Willis Island
+VK9X|CX|Christmas Island
+VO|CA|Canada
+VP2E|AI|Anguilla
+VP2M|MS|Montserrat
+VP2V|VG|British Virgin Is.
+VP5|TC|Turks and Caicos Islands
+VP6|PN|Pitcairn Islands
+VP8|AQ|South Shetland Islands
+VP9|BM|Bermuda
+VQ9|IO|Chagos Islands
+VR|HK|Hong Kong
+VU|IN|India
+VU4|IN|Andaman and Nicobar Islands
+VU7|IN|Lakshadweep
+VY|CA|Canada
+W|US|United States of America
+WL|US|Alaska
+WP4|PR|Puerto Rico
+XA|MX|Mexico
+XA4|MX|Revillagigedo Islands
+XB|MX|Mexico
+XB4|MX|Revillagigedo Islands
+XC|MX|Mexico
+XC4|MX|Revillagigedo Islands
+XD|MX|Mexico
+XD4|MX|Revillagigedo Islands
+XE|MX|Mexico
+XE4|MX|Revillagigedo Islands
+XF|MX|Mexico
+XF4|MX|Revillagigedo Islands
+XG|MX|Mexico
+XG4|MX|Revillagigedo Islands
+XH|MX|Mexico
+XH4|MX|Revillagigedo Islands
+XI|MX|Mexico
+XI4|MX|Revillagigedo Islands
+XJ|CA|Canada
+XK|CA|Canada
+XL|CA|Canada
+XM|CA|Canada
+XN|CA|Canada
+XO|CA|Canada
+XR|CL|Chile
+XT|BF|Burkina Faso
+XU|KH|Cambodia
+XV|VN|Viet Nam
+XW|LA|Laos
+XX9|MO|Macao
+XY|MM|Myanmar
+XZ|MM|Myanmar
+YA|AF|Afghanistan
+YB|ID|Indonesia
+YC|ID|Indonesia
+YD|ID|Indonesia
+YE|ID|Indonesia
+YF|ID|Indonesia
+YG|ID|Indonesia
+YH|ID|Indonesia
+YI|IQ|Iraq
+YJ|VU|Vanuatu
+YK|SY|Syria
+YL|LV|Latvia
+YM|TR|Turkey
+YN|NI|Nicaragua
+YO|RO|Romania
+YP|RO|Romania
+YQ|RO|Romania
+YR|RO|Romania
+YS|SV|El Salvador
+YT|RS|Serbia
+YU|RS|Serbia
+YV|VE|Venezuela
+YV0|VE|Isla de Aves
+YW|VE|Venezuela
+YX|VE|Venezuela
+YY|VE|Venezuela
+Z2|ZW|Zimbabwe
+Z3|MK|North Macedonia
+Z6|XK|Kosovo
+Z8|SS|South Sudan
+ZA|AL|Albania
+ZB2|GI|Gibraltar
+ZC4|GB|Sovereign Base Areas of Akrotiri and Dhekelia
+ZD7|SH|St. Helena
+ZD8|SH|Ascension Island
+ZD9|SH|Tristan da Cunha and Gough Islands
+ZF|KY|Cayman Islands
+ZK3|TK|Tokelau
+ZL|NZ|New Zealand
+ZL7|NZ|Chatham Islands
+ZL8|NZ|Kermadec Islands
+ZL9|NZ|New Zealand Subantarctic Islands
+ZM|NZ|New Zealand
+ZP|PY|Paraguay
+ZR|ZA|South Africa
+ZS|ZA|South Africa
+ZS8|ZA|Prince Edward and Marion Islands
+ZT|ZA|South Africa
+ZU|ZA|South Africa
+ZV|BR|Brazil
+ZW|BR|Brazil
+ZX|BR|Brazil
+ZY|BR|Brazil
+ZZ|BR|Brazil
