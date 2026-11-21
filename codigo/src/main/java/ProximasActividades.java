@@ -258,6 +258,42 @@ final class ProximasActividades {
         refrescar(app);
     }
 
+    private static String fIcs(long t) { return DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'").format(Instant.ofEpochSecond(t).atZone(ZoneOffset.UTC)); }
+
+    private static String codUrl(String s) { return java.net.URLEncoder.encode(s, java.nio.charset.StandardCharsets.UTF_8); }
+
+    /** Enlace de Google Calendar con la actividad ya rellenada (solo hay que pulsar Guardar). */
+    static String googleCal(Actividad a) {
+        String det = String.join("\n", java.util.stream.Stream.of(a.frec(), a.info(), "Organiza " + a.organiza(), WEB + "/cluster.html#actividades")
+                .filter(x -> x != null && !x.isBlank()).toList());
+        return "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + codUrl(a.nombre() + " · " + a.ind())
+                + "&dates=" + fIcs(a.inicio()) + "/" + fIcs(a.fin()) + "&details=" + codUrl(det) + "&location=" + codUrl(a.frec());
+    }
+
+    private static void abrirNavegador(String url) {
+        try { Desktop.getDesktop().browse(URI.create(url)); }
+        catch (Exception e) { JOptionPane.showMessageDialog(ventana, "No se ha podido abrir el navegador.", "Próximas actividades", JOptionPane.WARNING_MESSAGE); }
+    }
+
+    /** Guarda la actividad como .ics y lo abre (Outlook o el calendario del ordenador la añaden). */
+    private static void guardarIcs(Component padre, Actividad a) {
+        String esc = (a.nombre() + " · " + a.ind()).replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;");
+        String desc = String.join(" · ", java.util.stream.Stream.of(a.frec(), a.info(), "Organiza " + a.organiza()).filter(x -> x != null && !x.isBlank()).toList())
+                .replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;");
+        String ics = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Bitacora 26//Actividades//ES\r\nBEGIN:VEVENT\r\nUID:" + a.aid() + "@bitacora26.es\r\nDTSTAMP:"
+                + fIcs(Instant.now().getEpochSecond()) + "\r\nDTSTART:" + fIcs(a.inicio()) + "\r\nDTEND:" + fIcs(a.fin()) + "\r\nSUMMARY:" + esc
+                + "\r\nDESCRIPTION:" + desc + "\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n";
+        JFileChooser fc = new JFileChooser();
+        fc.setSelectedFile(new File(a.nombre().replaceAll("[\\\\/:*?\"<>|]", "").trim() + ".ics"));
+        if (fc.showSaveDialog(padre) != JFileChooser.APPROVE_OPTION) return;
+        try {
+            java.nio.file.Files.writeString(fc.getSelectedFile().toPath(), ics, java.nio.charset.StandardCharsets.UTF_8);
+            try { Desktop.getDesktop().open(fc.getSelectedFile()); } catch (Exception ignored) { }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(padre, "No se ha podido guardar: " + ex.getMessage(), "Próximas actividades", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
     private static void refrescar(LibroGuardiaUI app) {
         JDialog d = ventana;
         if (d == null) return;
@@ -311,7 +347,7 @@ final class ProximasActividades {
         };
         p.setOpaque(false);
         p.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
-        p.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
+        p.setMaximumSize(new Dimension(Integer.MAX_VALUE, 190));
         ZonedDateTime ini = Instant.ofEpochSecond(a.inicio()).atZone(ZoneOffset.UTC), fin = Instant.ofEpochSecond(a.fin()).atZone(ZoneOffset.UTC);
         LocalDate hoy = LocalDate.now(ZoneOffset.UTC);
         // Cuándo
@@ -350,6 +386,19 @@ final class ProximasActividades {
             ir.addActionListener(e -> irA(app, a, hz));
             bts.add(ir);
         }
+        JButton bCal = AprenderCw.botonPrin("A mi calendario…");
+        bCal.setToolTipText("Añade esta actividad a tu calendario (Google, Outlook, iPhone…)");
+        bCal.addActionListener(e -> {
+            JPopupMenu m = new JPopupMenu();
+            JMenuItem g = new JMenuItem("Google Calendar (se abre con la actividad rellenada: pulsa Guardar)");
+            g.addActionListener(x -> abrirNavegador(googleCal(a)));
+            JMenuItem o = new JMenuItem("Outlook, iPhone u otro calendario (guardar .ics y abrirlo)");
+            o.addActionListener(x -> guardarIcs(bCal, a));
+            m.add(g);
+            m.add(o);
+            m.show(bCal, 0, bCal.getHeight());
+        });
+        bts.add(bCal);
         boolean av = avisar().contains(a.aid());
         JButton bAv = AprenderCw.boton(av ? "Avisándome ✓" : "Avisarme");
         bAv.setToolTipText("Te avisa Bitácora 26 15 minutos antes de que empiece");
@@ -389,7 +438,7 @@ final class ProximasActividades {
         g.gridx = 2; g.weightx = 0; g.fill = GridBagConstraints.NONE;
         p.add(img, g);
         g.gridx = 3; g.insets = new Insets(0, 0, 0, 0);
-        bts.setPreferredSize(new Dimension(150, bts.getPreferredSize().height));
+        bts.setPreferredSize(new Dimension(165, bts.getPreferredSize().height));
         p.add(bts, g);
         return p;
     }
@@ -515,9 +564,9 @@ final class ProximasActividades {
         private final JComboBox<String> zona = new JComboBox<>(new String[]{"UTC", "LOCAL"});
         private final JCheckBox chkVarios = new JCheckBox("Varios días: hasta el");
         private final JTextField diaFin = new JTextField(10);
-        private final JTextField frec = new JTextField(26), ind = new JTextField(12);
-        private final JTextArea info = new JTextArea(2, 30);
-        private final JCheckBox chkSpot = new JCheckBox("Al empezar, mandar un spot automático al cluster de Bitácora 26", true);
+        private final JTextField frec = new JTextField(20), ind = new JTextField(12);
+        private final JTextArea info = new JTextArea(2, 24);
+        private final JCheckBox chkSpot = new JCheckBox("<html>Al empezar, mandar un spot automático<br>al cluster de Bitácora 26</html>", true);
         private final JButton bImg = new JButton("Imagen del diploma…");
         private final JLabel lImg = new JLabel("opcional · se reduce sola a unos 40 KB");
         private String imgB64 = "";
@@ -540,6 +589,7 @@ final class ProximasActividades {
             GridBagConstraints g = new GridBagConstraints();
             g.gridx = 0; g.gridy = 0; g.anchor = GridBagConstraints.WEST; g.fill = GridBagConstraints.HORIZONTAL; g.weightx = 1;
             g.insets = new Insets(3, 0, 3, 0);
+            cal.setPreferredSize(new Dimension(330, 190));
             cuerpo.add(cal, g);
             g.gridy++;
             cuerpo.add(fila(new JLabel("Desde"), desde, new JLabel("hasta"), hasta, zona), g);
@@ -574,12 +624,21 @@ final class ProximasActividades {
             chkAnunciar.addActionListener(e -> {
                 cuerpo.setVisible(chkAnunciar.isSelected());
                 Window w = SwingUtilities.getWindowAncestor(this);
-                if (w != null) w.pack();
+                if (w != null) {
+                    w.pack();
+                    // Que no se salga de la pantalla
+                    Rectangle pant = w.getGraphicsConfiguration().getBounds();
+                    Insets bordes = Toolkit.getDefaultToolkit().getScreenInsets(w.getGraphicsConfiguration());
+                    int alto = pant.height - bordes.top - bordes.bottom, ancho = pant.width - bordes.left - bordes.right;
+                    int x = Math.max(pant.x + bordes.left, Math.min(w.getX(), pant.x + bordes.left + ancho - w.getWidth()));
+                    int yy = Math.max(pant.y + bordes.top, Math.min(w.getY(), pant.y + bordes.top + alto - w.getHeight()));
+                    w.setLocation(x, yy);
+                }
             });
         }
 
         private static JLabel gris(String t) {
-            JLabel l = new JLabel("<html>" + t + "</html>");
+            JLabel l = new JLabel("<html><div style='width:330px'>" + t + "</div></html>");
             l.setForeground(GRIS);
             l.setFont(l.getFont().deriveFont(Font.PLAIN, 11f));
             return l;

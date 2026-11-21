@@ -2394,7 +2394,7 @@ public class LibroGuardiaUI extends JFrame {
     record VersionNueva(String version, String url, String sha256, long tamano, String notas) { }
 
     /** Versión del programa. Tiene que ser la misma que APP_VERSION de empaquetar.bat. */
-    static final String VERSION_APP = "1.40";
+    static final String VERSION_APP = "1.41";
 
     /** Versión del programa instalado (la pone empaquetar.bat; desde IntelliJ, la de VERSION_APP). */
     static String versionInstalada() {
@@ -6738,9 +6738,6 @@ public class LibroGuardiaUI extends JFrame {
         };
         chkActividadRC.addActionListener(ev -> indAnuncio.run());
         cbIndRCAct.addActionListener(ev -> indAnuncio.run());
-        gbc.insets = new Insets(10, 4, 2, 4);
-        gbc.gridy = y++; panel.add(panelAnuncio, gbc);
-        gbc.insets = new Insets(2, 4, 2, 4);
         JButton btnCancelarAct = new JButton("Cancelar");
         btnCancelarAct.setFont(btnCancelarAct.getFont().deriveFont(14f));
         btnCancelarAct.addActionListener(ev -> dialogo.dispose());
@@ -6851,7 +6848,18 @@ public class LibroGuardiaUI extends JFrame {
             }
         });
 
-        dialogo.add(panel, BorderLayout.CENTER);
+        // El anuncio va a la derecha (no hacia abajo), para que la ventana quepa en la pantalla
+        JPanel derechaAnuncio = new JPanel(new BorderLayout());
+        derechaAnuncio.setOpaque(false);
+        derechaAnuncio.setBorder(BorderFactory.createEmptyBorder(16, 0, 12, 18));
+        derechaAnuncio.add(panelAnuncio, BorderLayout.NORTH);
+        JPanel juntos = new JPanel(new BorderLayout());
+        JPanel izquierdaFija = new JPanel(new BorderLayout());   // arriba del todo: no se mueve al abrir el anuncio
+        izquierdaFija.setOpaque(false);
+        izquierdaFija.add(panel, BorderLayout.NORTH);
+        juntos.add(izquierdaFija, BorderLayout.CENTER);
+        juntos.add(derechaAnuncio, BorderLayout.EAST);
+        dialogo.add(juntos, BorderLayout.CENTER);
         verBandaModo.run();
         dialogo.setMinimumSize(new Dimension(520, 10));
         dialogo.pack();
