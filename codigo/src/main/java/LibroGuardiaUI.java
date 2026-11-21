@@ -3402,6 +3402,11 @@ public class LibroGuardiaUI extends JFrame {
         barraMenu.add(menuCluster);
 
         JMenu menuAcercaDe = new JMenu("Ayuda");
+        JMenuItem itemAprenderCw = new JMenuItem("Aprender CW…");
+        itemAprenderCw.setToolTipText("Escuchar letras (método Koch), copiar, practicar con tu manipulador y simulador de QSO");
+        itemAprenderCw.addActionListener(e -> AprenderCw.abrir(this));
+        menuAcercaDe.add(itemAprenderCw);
+        menuAcercaDe.addSeparator();
         JMenuItem itemGuia = new JMenuItem("Guía de Uso");
         itemGuia.setToolTipText("Abre la guía de uso en el navegador (bitacora26.es)");
         itemGuia.addActionListener(e -> {
