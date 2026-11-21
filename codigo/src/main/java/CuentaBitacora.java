@@ -227,6 +227,11 @@ class CuentaBitacora {
     }
 
     /** Pide una comprobación ya (sin esperar a los 5 minutos). */
+    /** Al guardar un contacto: si alguna cuenta manda la QSL sola, se sube y se manda enseguida (sin esperar los 5 minutos). */
+    void contactoGuardado() {
+        for (String c : cuentasB26()) if ("1".equals(LibroGuardiaUI.ConfigApp.get("QSL_" + c + "_AUTO", "0"))) { comprobarCuentasPronto(); return; }
+    }
+
     private void comprobarCuentasPronto() {
         if (hiloCuentas == null) arrancarCuentasB26();
         hiloCuentas.schedule(() -> sincronizarCuentasB26(false), 2, java.util.concurrent.TimeUnit.SECONDS);
@@ -354,14 +359,17 @@ class CuentaBitacora {
                 if (todoBien) {
                     conn.setAutoCommit(false);
                     try (Statement st = conn.createStatement();
-                         PreparedStatement ps = conn.prepareStatement("UPDATE qsos SET b26_conf = ?, b26_qsl = ? WHERE uuid = ?")) {
-                        st.executeUpdate("UPDATE qsos SET b26_conf = '', b26_qsl = 0 WHERE COALESCE(b26_conf,'') <> ''");
+                         PreparedStatement ps = conn.prepareStatement("UPDATE qsos SET b26_conf = ?, b26_qsl = (COALESCE(b26_qsl,0) & ~3) | ? WHERE uuid = ?")) {
+                        st.executeUpdate("UPDATE qsos SET b26_conf = '', b26_qsl = COALESCE(b26_qsl,0) & ~3 WHERE COALESCE(b26_conf,'') <> ''");
                         for (Map.Entry<String, String[]> e : conf.entrySet()) {
                             ps.setString(1, e.getValue()[1]);
                             ps.setInt(2, ("1".equals(e.getValue()[2]) ? 1 : 0) | ("1".equals(e.getValue()[3]) ? 2 : 0));
                             ps.setString(3, e.getKey());
                             ps.executeUpdate();
                         }
+                        // Las QSL que me han llegado (aunque el contacto no esté confirmado en el servidor) siguen contando
+                        st.executeUpdate("UPDATE qsos SET b26_qsl = COALESCE(b26_qsl,0) | 2 WHERE uuid IN "
+                                + "(SELECT uuid_contacto FROM qsl_recibidas WHERE COALESCE(uuid_contacto,'') <> '' AND COALESCE(origen,'') = '')");
                         conn.commit();
                     } catch (Exception ex) {
                         conn.rollback();
@@ -376,10 +384,15 @@ class CuentaBitacora {
                         String err = enviarQslDeContacto(conn, e.getKey());
                         if (err != null) { problema = "QSL a " + e.getValue()[1] + ": " + err; break; }
                     }
+                    // 3b) ... y a los contactos recién guardados (de los 3 últimos días), aunque aún no estén confirmados,
+                    //     si la otra estación usa Bitácora 26. Si no la usa, se vuelve a probar al día siguiente.
+                    if (problema == null) enviarQslAlGuardar(conn, cuentas, conf.keySet());
                 }
             }
             // 4) QSL que han llegado: se guardan en Documentos\Libro de Guardia\QSL y se borran del servidor
             int qslNuevas = descargarQslNuevas(conn, cuentas);
+            enlazarQslSueltas(conn);
+            asociarImagenesDeCarpeta(conn);
             int diplomasNuevos = descargarDiplomasNuevos(cuentas);
             if (qslNuevas + diplomasNuevos > 0) avisarLlegadas(qslNuevas, diplomasNuevos);
             java.util.List<String> sinCondiciones = new java.util.ArrayList<>();
@@ -472,13 +485,26 @@ class CuentaBitacora {
 
     /** Texto de la columna "Confirmación". */
     static String textoConfirmacion(String conf, int qsl) {
-        if (conf == null || conf.isEmpty()) return (qsl & 1) != 0 ? "QSL ENVIADA" : "";   // QSL mandada sin estar confirmado
-        return switch (qsl) {
-            case 1 -> "★ QSL ENVIADA";
-            case 2 -> "★ QSL RECIBIDA";
-            case 3 -> "★ QSL ENV. Y REC.";
-            default -> "★ CONFIRMADO";
-        };
+        // Bits de b26_qsl: 1 = mandé mi QSL, 2 = me llegó su QSL (Bitácora 26), 4 = eQSL, 8 = LoTW, 16 = QRZ.com,
+        // 32 = QSL que he puesto yo en la carpeta (papel escaneado, correo…) y está asociada al contacto
+        StringBuilder online = new StringBuilder();
+        if ((qsl & 8) != 0) online.append("LoTW");
+        if ((qsl & 4) != 0) online.append(online.length() > 0 ? " · " : "").append("eQSL");
+        if ((qsl & 16) != 0) online.append(online.length() > 0 ? " · " : "").append("QRZ");
+        String b26;
+        if (conf == null || conf.isEmpty()) {
+            if ((qsl & 2) != 0 || (qsl & 32) != 0) b26 = (qsl & 1) != 0 ? "QSL ENV. Y REC." : "QSL RECIBIDA";   // me ha llegado su QSL: cuenta como confirmado
+            else if (online.length() == 0) return (qsl & 1) != 0 ? "QSL ENVIADA" : "";   // QSL mandada sin estar confirmado
+            else b26 = (qsl & 1) != 0 ? "QSL ENVIADA" : "";
+        } else {
+            b26 = switch ((qsl & 3) | ((qsl & 32) != 0 ? 2 : 0)) {
+                case 1 -> "QSL ENVIADA";
+                case 2 -> "QSL RECIBIDA";
+                case 3 -> "QSL ENV. Y REC.";
+                default -> "CONFIRMADO";
+            };
+        }
+        return "★ " + b26 + (b26.isEmpty() || online.length() == 0 ? "" : " · ") + online;
     }
 
     // ---------------------------------------------------------------- QSL: diseño y creación de la imagen
@@ -527,6 +553,39 @@ class CuentaBitacora {
     }
 
     /** Manda la QSL de un contacto (por su uuid), esté confirmado o no. Devuelve null si ha ido bien, o el motivo. */
+    private void enviarQslAlGuardar(Connection conn, List<String> cuentas, java.util.Set<String> confirmados) {
+        java.util.Set<String> auto = new java.util.HashSet<>();
+        for (String c : cuentas) if ("1".equals(LibroGuardiaUI.ConfigApp.get("QSL_" + c + "_AUTO", "0"))) auto.add(c);
+        if (auto.isEmpty()) return;
+        try (Statement st = conn.createStatement()) {
+            st.executeUpdate("CREATE TABLE IF NOT EXISTS qsl_auto_intentos (uuid TEXT PRIMARY KEY, proximo INTEGER)");
+        } catch (Exception e) { return; }
+        long ahoraMin = System.currentTimeMillis() / 60000;
+        List<String[]> pendientes = new ArrayList<>();
+        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery("SELECT q.uuid, COALESCE(q.indicativo,''), COALESCE(q.fecha,''), COALESCE(q.hora,''), "
+                + "COALESCE(q.b26_cuenta,'') FROM qsos q LEFT JOIN qsl_auto_intentos i ON i.uuid = q.uuid "
+                + "WHERE COALESCE(q.b26_sub,0) = 1 AND (COALESCE(q.b26_qsl,0) & 1) = 0 AND COALESCE(q.uuid,'') <> '' "
+                + "AND (i.proximo IS NULL OR i.proximo < " + System.currentTimeMillis() + ") ORDER BY q.id DESC LIMIT 200")) {
+            while (rs.next()) {
+                if (confirmados.contains(rs.getString(1)) || !auto.contains(rs.getString(5))) continue;
+                long m = minutoUtc(rs.getString(3), rs.getString(4));
+                if (m <= 0 || ahoraMin - m > 3 * 24 * 60) continue;   // solo los de los 3 últimos días (no se manda a los antiguos de golpe)
+                pendientes.add(new String[]{rs.getString(1), rs.getString(2)});
+            }
+        } catch (Exception e) { return; }
+        int mandadas = 0;
+        for (String[] p : pendientes) {
+            if (mandadas >= 20) break;
+            String err = enviarQslDeContacto(conn, p[0]);
+            if (err == null) { mandadas++; continue; }
+            // no usa Bitácora 26, hay varios con ese indicativo o aún no está subido: se vuelve a probar más tarde
+            long espera = err.contains("aún no se ha subido") ? 2 * 60_000L : 24 * 3_600_000L;
+            try (PreparedStatement ps = conn.prepareStatement("INSERT OR REPLACE INTO qsl_auto_intentos (uuid, proximo) VALUES (?, ?)")) {
+                ps.setString(1, p[0]); ps.setLong(2, System.currentTimeMillis() + espera); ps.executeUpdate();
+            } catch (Exception ignored) { }
+        }
+    }
+
     private String enviarQslDeContacto(Connection conn, String uuid) {
         try (PreparedStatement ps = conn.prepareStatement("SELECT COALESCE(indicativo,''), COALESCE(fecha,''), COALESCE(hora,''), COALESCE(banda,''), "
                 + "COALESCE(modo,''), COALESCE(rst_sent,''), COALESCE(b26_cuenta,''), COALESCE(b26_conf,''), COALESCE(freq_tx,'') FROM qsos WHERE uuid = ?")) {
@@ -567,12 +626,15 @@ class CuentaBitacora {
             if (cuentasB26().isEmpty()) { avisoSinCuentaB26(); return; }
             new Thread(() -> sincronizarCuentasB26(true), "CuentasB26-ya").start();
         });
+        JMenuItem iOnline = new JMenuItem("Bajar confirmaciones de eQSL, LoTW y QRZ ahora");
+        iOnline.addActionListener(e -> ConfirmacionesOnline.ejecutarEnSegundoPlano(app, true));
         JMenuItem iDiplomas = new JMenuItem("Diplomas recibidos…");
         iDiplomas.addActionListener(e -> abrirDiplomasRecibidos());
         menuQsl.add(iDiseno);
         menuQsl.add(iBuzon);
         menuQsl.addSeparator();
         menuQsl.add(iYa);
+        menuQsl.add(iOnline);
         arrancarCuentasB26();
         return menuQsl;
     }
@@ -919,7 +981,7 @@ class CuentaBitacora {
         if (!l.remove(ind)) return;
         guardarCuentasB26(l);
         try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar(); PreparedStatement ps = conn.prepareStatement(
-                "UPDATE qsos SET b26_sub = 0, b26_conf = '', b26_qsl = 0, b26_cuenta = '' WHERE b26_cuenta = ?")) {
+                "UPDATE qsos SET b26_sub = 0, b26_conf = '', b26_qsl = COALESCE(b26_qsl,0) & ~3, b26_cuenta = '' WHERE b26_cuenta = ?")) {
             ps.setString(1, ind); ps.executeUpdate();
         } catch (Exception ignored) { }
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(app, "Este ordenador ya no está vinculado a la cuenta de " + ind + ".\n"
@@ -1205,7 +1267,7 @@ class CuentaBitacora {
         l.remove(c);
         guardarCuentasB26(l);
         try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar(); PreparedStatement ps = conn.prepareStatement(
-                "UPDATE qsos SET b26_sub = 0, b26_conf = '', b26_qsl = 0, b26_cuenta = '' WHERE b26_cuenta = ?");
+                "UPDATE qsos SET b26_sub = 0, b26_conf = '', b26_qsl = COALESCE(b26_qsl,0) & ~3, b26_cuenta = '' WHERE b26_cuenta = ?");
              PreparedStatement ps2 = conn.prepareStatement("DELETE FROM b26_borrados WHERE cuenta = ?")) {
             ps.setString(1, c); ps.executeUpdate();
             ps2.setString(1, c); ps2.executeUpdate();
@@ -1517,7 +1579,7 @@ class CuentaBitacora {
         private final JCheckBox chkProporcion = new JCheckBox("Mantener la proporción");
         private final JPanel panelTexto = new JPanel(new GridBagLayout()), panelComun = new JPanel(new GridBagLayout());
         private final JLabel lblSel = new JLabel("Pincha en un elemento de la QSL para cambiarlo");
-        private final JCheckBox chkAuto = new JCheckBox("Enviar mi QSL automáticamente cuando se confirme un contacto");
+        private final JCheckBox chkAuto = new JCheckBox("Enviar mi QSL automáticamente al guardar cada contacto en el LOG");
         private final JComboBox<String> cbOrientacion = new JComboBox<>(new String[]{"Horizontal (14 × 9 cm)", "Vertical (9 × 14 cm)"});
         // Arrastrar
         private int modoArrastre = 0;   // 0 nada, 1 mover, 2 cambiar tamaño
@@ -2004,6 +2066,102 @@ class CuentaBitacora {
         return f;
     }
 
+    /** Indicativo que hay en el nombre de una imagen («EA7KAU.jpg», «F4NBH_P.jpg» → F4NBH), o "" si no lo parece. */
+    static String indicativoDeFichero(String nombre) {
+        String base = nombre.replaceFirst("\\.[^.]+$", "").toUpperCase(java.util.Locale.ROOT).split("[_\\s-]")[0];
+        return base.matches("[A-Z0-9]{1,3}[0-9][A-Z0-9]*[A-Z]") ? base : "";
+    }
+
+    /**
+     * Imágenes que he puesto yo en la carpeta QSL: si en el LOG hay un solo contacto con ese indicativo, se asocian solas
+     * (y el contacto se marca con la ★). Si hay varios, se elige con «Asociar al contacto…» en «QSL recibidas».
+     */
+    static void asociarImagenesDeCarpeta(Connection conn) {
+        java.util.Set<String> conocidas = new java.util.HashSet<>();
+        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery("SELECT LOWER(fichero) FROM qsl_recibidas")) {
+            while (rs.next()) conocidas.add(rs.getString(1));
+        } catch (Exception e) { return; }
+        File[] fs = carpetaQslRecibidas().listFiles((dir, n) -> {
+            String x = n.toLowerCase(java.util.Locale.ROOT);
+            return (x.endsWith(".jpg") || x.endsWith(".jpeg") || x.endsWith(".png") || x.endsWith(".gif") || x.endsWith(".pdf")) && !conocidas.contains(x);
+        });
+        if (fs == null) return;
+        for (File f : fs) {
+            String ind = indicativoDeFichero(f.getName());
+            if (ind.isEmpty()) ind = baseIndicativo(f.getName().replaceFirst("\\.[^.]+$", "").split("_")[0]);   // CB: «CALDERA.jpg»
+            if (ind.length() < 3) continue;
+            List<String[]> qs = contactosDe(conn, ind);
+            if (qs.size() == 1) asociarFichero(conn, f, ind, qs.get(0));
+        }
+    }
+
+    /** Contactos del LOG con ese indicativo: {uuid, fecha, hora, banda, modo, id}. */
+    static List<String[]> contactosDe(Connection conn, String ind) {
+        List<String[]> r = new ArrayList<>();
+        try (PreparedStatement ps = conn.prepareStatement("SELECT COALESCE(uuid,''), COALESCE(fecha,''), COALESCE(hora,''), COALESCE(banda,''), COALESCE(modo,''), id, "
+                + "COALESCE(indicativo,'') FROM qsos WHERE UPPER(indicativo) LIKE ? ORDER BY id DESC")) {
+            ps.setString(1, "%" + ind + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) if (baseIndicativo(rs.getString(7)).equals(ind) && !rs.getString(1).isEmpty())
+                    r.add(new String[]{rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), String.valueOf(rs.getInt(6))});
+            }
+        } catch (Exception ignored) { }
+        return r;
+    }
+
+    /** Une una imagen de la carpeta con un contacto {uuid, fecha, hora, banda, modo} y le pone la ★. */
+    static void asociarFichero(Connection conn, File f, String ind, String[] q) {
+        String banda = q[3].equalsIgnoreCase("CB") ? "CB" : q[3].toLowerCase();
+        try (PreparedStatement del = conn.prepareStatement("DELETE FROM qsl_recibidas WHERE LOWER(fichero) = ? AND COALESCE(origen,'') = 'Carpeta'");
+             PreparedStatement ps = conn.prepareStatement("INSERT INTO qsl_recibidas (fichero, de, cuenta, minuto, banda, modo, uuid_contacto, llegada, vista, origen) "
+                     + "VALUES (?, ?, '', ?, ?, ?, ?, ?, 1, 'Carpeta')");
+             PreparedStatement up = conn.prepareStatement("UPDATE qsos SET b26_qsl = COALESCE(b26_qsl,0) | 32 WHERE uuid = ?")) {
+            del.setString(1, f.getName().toLowerCase(java.util.Locale.ROOT));
+            del.executeUpdate();
+            ps.setString(1, f.getName()); ps.setString(2, ind); ps.setLong(3, minutoUtc(q[1], q[2])); ps.setString(4, banda);
+            ps.setString(5, q[4]); ps.setString(6, q[0]); ps.setLong(7, f.lastModified());
+            ps.executeUpdate();
+            up.setString(1, q[0]);
+            up.executeUpdate();
+        } catch (Exception ignored) { }
+    }
+
+    /** QSL ya recibidas que no estaban unidas a ningún contacto (llegaron sin confirmar): se buscan en el LOG y se marcan. */
+    private static void enlazarQslSueltas(Connection conn) {
+        List<Object[]> sueltas = new ArrayList<>();
+        try (Statement st = conn.createStatement(); ResultSet rs = st.executeQuery(
+                "SELECT id, de, banda, minuto FROM qsl_recibidas WHERE COALESCE(uuid_contacto,'') = '' AND COALESCE(origen,'') = ''")) {
+            while (rs.next()) sueltas.add(new Object[]{rs.getInt(1), rs.getString(2), rs.getString(3), rs.getLong(4)});
+        } catch (Exception e) { return; }
+        for (Object[] q : sueltas) {
+            String u = buscarContactoDeQsl(conn, (String) q[1], (String) q[2], (Long) q[3]);
+            if (u.isEmpty()) continue;
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE qsl_recibidas SET uuid_contacto = ? WHERE id = ?");
+                 PreparedStatement ps2 = conn.prepareStatement("UPDATE qsos SET b26_qsl = COALESCE(b26_qsl,0) | 2 WHERE uuid = ?")) {
+                ps.setString(1, u); ps.setInt(2, (Integer) q[0]); ps.executeUpdate();
+                ps2.setString(1, u); ps2.executeUpdate();
+            } catch (Exception ignored) { }
+        }
+    }
+
+    /** uuid del contacto de mi LOG con ese indicativo y banda a ±30 minutos (o "" si no hay ninguno). */
+    static String buscarContactoDeQsl(Connection conn, String de, String banda, long minuto) {
+        String mejor = "";
+        long dif = 31;
+        try (PreparedStatement ps = conn.prepareStatement("SELECT COALESCE(uuid,''), COALESCE(indicativo,''), COALESCE(fecha,''), COALESCE(hora,''), "
+                + "COALESCE(banda,'') FROM qsos WHERE UPPER(indicativo) LIKE ?")) {
+            ps.setString(1, "%" + de.toUpperCase(java.util.Locale.ROOT) + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    if (!baseIndicativo(rs.getString(2)).equals(de) || !rs.getString(5).equalsIgnoreCase(banda)) continue;
+                    long d = Math.abs(minutoUtc(rs.getString(3), rs.getString(4)) - minuto);
+                    if (d < dif) { dif = d; mejor = rs.getString(1); }
+                }
+            }
+        } catch (Exception ignored) { }
+        return mejor;
+    }
+
     /** Descarga las QSL que han llegado a mis cuentas, las guarda en la carpeta QSL y las borra del servidor. Devuelve las nuevas. */
     private int descargarQslNuevas(Connection conn, List<String> cuentas) throws Exception {
         int nuevas = 0;
@@ -2031,6 +2189,8 @@ class CuentaBitacora {
                 File destino = new File(carpetaQslRecibidas(), nombre + ".jpg");
                 for (int k = 2; destino.exists(); k++) destino = new File(carpetaQslRecibidas(), nombre + "_" + k + ".jpg");
                 java.nio.file.Files.write(destino.toPath(), img);
+                // Sin confirmar en el servidor: se busca en mi LOG el contacto (mismo indicativo y banda, ±30 minutos)
+                if (idMio.isEmpty()) idMio = buscarContactoDeQsl(conn, de, banda, minuto);
                 try (PreparedStatement ps = conn.prepareStatement("INSERT INTO qsl_recibidas (fichero, de, cuenta, minuto, banda, modo, uuid_contacto, llegada, vista) "
                         + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)")) {
                     ps.setString(1, destino.getName()); ps.setString(2, de); ps.setString(3, cuenta); ps.setLong(4, minuto);
@@ -2275,6 +2435,12 @@ class CuentaBitacora {
         }
     }
 
+    /** Después de bajar QSL de eQSL: el menú «QSL (n)» se pone al día. */
+    void refrescarQslSinLeer() {
+        qslSinLeer = contarQslSinVer();
+        SwingUtilities.invokeLater(this::actualizarMenuQsl);
+    }
+
     /** QSL recibidas que aún no se han mirado en la ventana. */
     private static int contarQslSinVer() {
         try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar(); Statement st = conn.createStatement();
@@ -2287,15 +2453,16 @@ class CuentaBitacora {
 
     /** Ventana "QSL recibidas" (las que están en la carpeta QSL). Si soloDe (uuid de un contacto) no es null, abre directamente esa QSL. */
     void abrirBuzonQsl(String soloDe) {
+        try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar()) { asociarImagenesDeCarpeta(conn); } catch (Exception ignored) { }
         List<String[]> filas = new ArrayList<>();   // {id, fichero, de, contacto, banda, modo, mi indicativo, llegada, nueva, uuid}
         java.text.SimpleDateFormat fmt = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm");
         try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar(); Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery("SELECT id, fichero, de, minuto, banda, modo, cuenta, llegada, vista, COALESCE(uuid_contacto,'') FROM qsl_recibidas ORDER BY llegada DESC")) {
+             ResultSet rs = st.executeQuery("SELECT id, fichero, de, minuto, banda, modo, cuenta, llegada, vista, COALESCE(uuid_contacto,''), COALESCE(origen,'') FROM qsl_recibidas ORDER BY llegada DESC")) {
             while (rs.next()) {
                 java.time.LocalDateTime f = java.time.LocalDateTime.ofEpochSecond(rs.getLong(4) * 60, 0, ZoneOffset.UTC);
                 filas.add(new String[]{String.valueOf(rs.getInt(1)), rs.getString(2), rs.getString(3), f.format(app.FMT_FECHA_UI) + " " + f.format(app.FMT_HORA_UI) + " UTC",
                         rs.getString(5), rs.getString(6), indicativoParaMostrar(rs.getString(7)), fmt.format(new java.util.Date(rs.getLong(8))), rs.getInt(9) == 0 ? "NUEVA" : "",
-                        rs.getString(10), String.valueOf(rs.getLong(4))});
+                        rs.getString(10), String.valueOf(rs.getLong(4)), rs.getString(11)});
             }
         } catch (Exception ignored) { }
         if (soloDe != null) {
@@ -2322,6 +2489,20 @@ class CuentaBitacora {
                     "QSL recibida", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+        // Además de las que llegan por Bitácora 26, cualquier imagen que pongas tú en la carpeta (por ejemplo las de eQSL)
+        java.util.Set<String> conocidas = new java.util.HashSet<>();
+        for (String[] f : filas) conocidas.add(f[1].toLowerCase(java.util.Locale.ROOT));
+        File[] sueltas = carpetaQslRecibidas().listFiles((dir, n) -> {
+            String x = n.toLowerCase(java.util.Locale.ROOT);
+            return (x.endsWith(".jpg") || x.endsWith(".jpeg") || x.endsWith(".png") || x.endsWith(".gif") || x.endsWith(".pdf")) && !conocidas.contains(x);
+        });
+        if (sueltas != null) {
+            java.util.Arrays.sort(sueltas, (a, b) -> Long.compare(b.lastModified(), a.lastModified()));
+            for (File f : sueltas) {
+                String de = f.getName().replaceFirst("\\.[^.]+$", "").toUpperCase(java.util.Locale.ROOT);
+                filas.add(new String[]{"-1", f.getName(), de, "", "", "", "", fmt.format(new java.util.Date(f.lastModified())), "", "", "0"});
+            }
+        }
         JDialog d = new JDialog(app, "QSL recibidas", true);
         DefaultTableModel m = new DefaultTableModel(new Object[]{"De", "Contacto", "Banda", "Modo", "Mi indicativo", "Llegó", ""}, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
@@ -2330,15 +2511,24 @@ class CuentaBitacora {
         JTable t = new JTable(m);
         t.setRowHeight(22);
         t.setAutoCreateRowSorter(true);
-        t.getColumnModel().getColumn(1).setPreferredWidth(170);
-        t.getColumnModel().getColumn(5).setPreferredWidth(130);
-        JButton bVer = new JButton("Ver"), bCarpeta = new JButton("Abrir la carpeta QSL"), bBorrar = new JButton("Borrar"), bCerrar = new JButton("Cerrar");
+        t.getColumnModel().getColumn(0).setPreferredWidth(170);
+        t.getColumnModel().getColumn(1).setPreferredWidth(150);
+        t.getColumnModel().getColumn(5).setPreferredWidth(120);
+        t.getColumnModel().getColumn(6).setPreferredWidth(55);
+        JButton bVer = new JButton("Ver en grande"), bCarpeta = new JButton("Abrir la carpeta QSL"), bBorrar = new JButton("Borrar"), bCerrar = new JButton("Cerrar");
+        JButton bAsociar = new JButton("Asociar al contacto…");
+        bAsociar.setToolTipText("Elige a qué contacto de tu LOG corresponde esta QSL (se le pone la ★)");
         java.util.function.Supplier<String[]> elegida = () -> {
             int f = t.getSelectedRow();
             if (f < 0) { JOptionPane.showMessageDialog(d, "Elige primero una QSL de la lista.", "QSL recibidas", JOptionPane.INFORMATION_MESSAGE); return null; }
             return filas.get(t.convertRowIndexToModel(f));
         };
-        bVer.addActionListener(e -> { String[] f = elegida.get(); if (f != null) verQslRecibida(d, f); });
+        bVer.addActionListener(e -> {
+            String[] f = elegida.get();
+            if (f == null) return;
+            File fich = new File(carpetaQslRecibidas(), f[1]);
+            try { Desktop.getDesktop().open(fich); } catch (Exception ex) { verQslRecibida(d, f); }
+        });
         t.addMouseListener(new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) { if (e.getClickCount() == 2) bVer.doClick(); }
         });
@@ -2347,28 +2537,94 @@ class CuentaBitacora {
                 JOptionPane.showMessageDialog(d, "La carpeta es:\n" + carpetaQslRecibidas().getAbsolutePath(), "QSL recibidas", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+        // Vista previa de la QSL elegida (a la derecha), como en «Diplomas recibidos»
+        JLabel vista = new JLabel("Elige una QSL para verla aquí", SwingConstants.CENTER);
+        vista.setForeground(Color.GRAY);
+        JScrollPane spVista = new JScrollPane(vista);
+        spVista.setPreferredSize(new Dimension(620, 440));
+        final int[] pedido = {0};
+        t.getSelectionModel().addListSelectionListener(ev -> {
+            if (ev.getValueIsAdjusting() || t.getSelectedRow() < 0) return;
+            String[] f = filas.get(t.convertRowIndexToModel(t.getSelectedRow()));
+            File fich = new File(carpetaQslRecibidas(), f[1]);
+            int yo = ++pedido[0];
+            vista.setIcon(null);
+            vista.setText("Cargando…");
+            new Thread(() -> {
+                Image img = vistaPreviaDiploma(fich, 600, 420);
+                SwingUtilities.invokeLater(() -> {
+                    if (yo != pedido[0]) return;
+                    if (img == null) { vista.setIcon(null); vista.setText("No se puede mostrar esta QSL"); }
+                    else { vista.setText(null); vista.setIcon(new ImageIcon(img)); }
+                });
+            }, "VistaQsl").start();
+        });
         bBorrar.addActionListener(e -> {
             String[] f = elegida.get();
             if (f == null || JOptionPane.showConfirmDialog(d, "¿Borrar de tu ordenador la QSL de " + f[2] + "?", "QSL recibidas", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) return;
             new File(carpetaQslRecibidas(), f[1]).delete();
-            try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar(); PreparedStatement ps = conn.prepareStatement("DELETE FROM qsl_recibidas WHERE id = ?")) {
-                ps.setInt(1, Integer.parseInt(f[0])); ps.executeUpdate();
+            try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar(); PreparedStatement ps = conn.prepareStatement("DELETE FROM qsl_recibidas WHERE LOWER(fichero) = ?")) {
+                ps.setString(1, f[1].toLowerCase(java.util.Locale.ROOT)); ps.executeUpdate();
             } catch (Exception ignored) { }
             int fila = t.convertRowIndexToModel(t.getSelectedRow());
             filas.remove(fila);
             m.removeRow(fila);
+            vista.setIcon(null);
+            vista.setText("Elige una QSL para verla aquí");
         });
         bCerrar.addActionListener(e -> d.dispose());
         JPanel abajo = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        abajo.add(bVer); abajo.add(bCarpeta); abajo.add(bBorrar); abajo.add(bCerrar);
-        JLabel nota = new JLabel("<html>&nbsp;" + (filas.isEmpty() ? "Todavía no te ha llegado ninguna QSL." : "Doble clic para ver una QSL.")
-                + " Las QSL llegan solas y se guardan en tu carpeta <b>" + carpetaQslRecibidas().getAbsolutePath().replace("&", "&amp;") + "</b>"
-                + " (en el servidor se borran en cuanto llegan).</html>");
+        bAsociar.addActionListener(e -> {
+            String[] f = elegida.get();
+            if (f == null) return;
+            if (!"-1".equals(f[0]) && !f[9].isEmpty() && !"Carpeta".equals(f.length > 11 ? f[11] : "")) {
+                JOptionPane.showMessageDialog(d, "Esta QSL ya está unida a su contacto.", "QSL recibidas", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+            String ind = f[2].isEmpty() ? indicativoDeFichero(f[1]) : f[2];
+            if (ind.isEmpty() || !ind.matches("[A-Z0-9/]+")) ind = indicativoDeFichero(f[1]);
+            ind = (String) JOptionPane.showInputDialog(d, "Indicativo de la QSL:", "Asociar al contacto", JOptionPane.QUESTION_MESSAGE, null, null, ind);
+            if (ind == null || ind.isBlank()) return;
+            ind = baseIndicativo(ind);
+            try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar()) {
+                List<String[]> qs = contactosDe(conn, ind);
+                if (qs.isEmpty()) { JOptionPane.showMessageDialog(d, "No tienes ningún contacto con " + ind + " en el LOG.", "Asociar al contacto", JOptionPane.INFORMATION_MESSAGE); return; }
+                String[] opciones = new String[qs.size()];
+                for (int i = 0; i < qs.size(); i++) opciones[i] = qs.get(i)[1] + "  " + qs.get(i)[2] + " UTC  ·  " + qs.get(i)[3] + "  ·  " + qs.get(i)[4];
+                Object el = JOptionPane.showInputDialog(d, "¿Qué contacto con " + ind + " confirma esta QSL?\n(mira la fecha y la hora en la tarjeta de la derecha)",
+                        "Asociar al contacto", JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+                if (el == null) return;
+                int k = java.util.Arrays.asList(opciones).indexOf(el);
+                asociarFichero(conn, new File(carpetaQslRecibidas(), f[1]), ind, qs.get(k));
+                if (!"-1".equals(f[0]) && !"Carpeta".equals(f.length > 11 ? f[11] : "")) {   // una de Bitácora 26 o eQSL sin contacto: se une sin duplicarla
+                    try (PreparedStatement ps = conn.prepareStatement("DELETE FROM qsl_recibidas WHERE LOWER(fichero) = ? AND origen = 'Carpeta'");
+                         PreparedStatement up = conn.prepareStatement("UPDATE qsl_recibidas SET uuid_contacto = ? WHERE id = ?")) {
+                        ps.setString(1, f[1].toLowerCase(java.util.Locale.ROOT)); ps.executeUpdate();
+                        up.setString(1, qs.get(k)[0]); up.setInt(2, Integer.parseInt(f[0])); up.executeUpdate();
+                    }
+                }
+                int fila = t.convertRowIndexToModel(t.getSelectedRow());
+                f[2] = ind;
+                f[3] = qs.get(k)[1] + " " + qs.get(k)[2] + " UTC";
+                f[4] = qs.get(k)[3];
+                f[5] = qs.get(k)[4];
+                f[9] = qs.get(k)[0];
+                m.setValueAt(f[2], fila, 0); m.setValueAt(f[3], fila, 1); m.setValueAt(f[4], fila, 2); m.setValueAt(f[5], fila, 3);
+                if (app.tablaQSOs != null && !app.mostrandoVistaPuntos && !app.mostrandoVistaCB) app.cargarQSOsDesdeBaseDatos();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(d, "No se ha podido asociar: " + ex.getMessage(), "Asociar al contacto", JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        abajo.add(bAsociar); abajo.add(bVer); abajo.add(bCarpeta); abajo.add(bBorrar); abajo.add(bCerrar);
+        JLabel nota = new JLabel("<html>&nbsp;" + (filas.isEmpty() ? "Todavía no te ha llegado ninguna QSL." : "Doble clic para verla en grande.")
+                + " Las QSL de Bitácora 26 llegan solas; también salen las imágenes que pongas tú en <b>" + carpetaQslRecibidas().getAbsolutePath().replace("&", "&amp;") + "</b>.</html>");
         d.setLayout(new BorderLayout(4, 4));
         d.add(nota, BorderLayout.NORTH);
         JScrollPane sp = new JScrollPane(t);
-        sp.setPreferredSize(new Dimension(760, 300));
-        d.add(sp, BorderLayout.CENTER);
+        sp.setPreferredSize(new Dimension(560, 440));
+        JSplitPane partes = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, sp, spVista);
+        partes.setResizeWeight(0.45);
+        d.add(partes, BorderLayout.CENTER);
         d.add(abajo, BorderLayout.SOUTH);
         // Al abrir la ventana, las nuevas pasan a vistas
         try (Connection conn = LibroGuardiaUI.DatabaseManager.conectar(); Statement st = conn.createStatement()) {
@@ -2378,6 +2634,7 @@ class CuentaBitacora {
         actualizarMenuQsl();
         d.pack();
         d.setLocationRelativeTo(app);
+        if (!filas.isEmpty()) t.setRowSelectionInterval(0, 0);
         d.setVisible(true);
     }
 

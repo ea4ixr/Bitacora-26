@@ -62,6 +62,10 @@ class VentanaDigitales extends JFrame {
     private final JPanel tarjetas = new JPanel(new CardLayout());
     private VentanaRtty rtty;
     private boolean enRtty = false;
+    private VentanaCw cw;
+    private boolean enCw = false;
+    private static final String[][] FREC_CW = {{"160m", "1830000"}, {"80m", "3530000"}, {"40m", "7030000"}, {"30m", "10120000"},
+            {"20m", "14050000"}, {"17m", "18080000"}, {"15m", "21050000"}, {"12m", "24900000"}, {"10m", "28050000"}, {"6m", "50090000"}};
     private static final String[][] FREC_RTTY = {{"80m", "3580000"}, {"40m", "7040000"}, {"30m", "10140000"}, {"20m", "14080000"},
             {"17m", "18100000"}, {"15m", "21080000"}, {"12m", "24910000"}, {"10m", "28080000"}};
     private final DefaultTableModel modeloActividad = new DefaultTableModel(new Object[]{"UTC", "dB", "DT", "Hz", "Mensaje", "País", ""}, 0) {
@@ -268,7 +272,7 @@ class VentanaDigitales extends JFrame {
         reloj = new javax.swing.Timer(200, e -> cadaRato());
         reloj.start();
         addWindowListener(new WindowAdapter() {
-            @Override public void windowClosed(WindowEvent e) { if (rtty != null) rtty.desactivar(); emisor.cerrar(); reloj.stop(); motor.parar(); cerrarSerie(); }
+            @Override public void windowClosed(WindowEvent e) { if (rtty != null) rtty.desactivar(); if (cw != null) cw.desactivar(); emisor.cerrar(); reloj.stop(); motor.parar(); cerrarSerie(); }
         });
         setSize(1440, 930);
         setMinimumSize(new Dimension(1100, 700));
@@ -417,7 +421,7 @@ class VentanaDigitales extends JFrame {
         ButtonGroup grupo = new ButtonGroup();
         JPanel izq = new JPanel(new GridLayout(2, 1, 0, 4));
         izq.setOpaque(false);
-        String[][] grupos = {{"CONTACTOS", "FT8", "FT4", "RTTY"}, {"BALIZAS", "WSPR"}};
+        String[][] grupos = {{"CONTACTOS", "FT8", "FT4", "RTTY", "CW"}, {"BALIZAS", "WSPR"}};
         for (String[] gr : grupos) {
             JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
             fila.setOpaque(false);
@@ -431,9 +435,9 @@ class VentanaDigitales extends JFrame {
                 // Modos que van en su propia carpeta (digitales/wspr...): si la carpeta no está, el botón sigue en gris
                 String extra = m.equals("WSPR") ? "digitales.wspr.VentanaWspr" : null;
                 boolean hayExtra = extra != null && existeClase(extra);
-                if (m.equals("RTTY")) {   // RTTY va en su propia ventana
-                    b.setToolTipText("RTTY: abre su ventana");
-                    b.addActionListener(e -> ponerRtty(true));
+                if (m.equals("RTTY") || m.equals("CW")) {   // RTTY y CW tienen su propia parte de abajo
+                    b.setToolTipText(m + ": cambia la parte de abajo a " + m);
+                    b.addActionListener(e -> { if (m.equals("CW")) ponerCw(true); else ponerRtty(true); });
                     grupo.add(b);
                     botonesModo.put(m, b);
                     fila.add(b);
@@ -917,6 +921,7 @@ class VentanaDigitales extends JFrame {
     private void ponerRtty(boolean si) {
         if (si == enRtty) return;
         if (si) {
+            ponerCw(false);
             if (txActivo || emisor.transmitiendo()) desactivarTx("Se ha cambiado a RTTY: transmisión de FT8/FT4 parada.");
             if (rtty == null) { rtty = new VentanaRtty(app, this); tarjetas.add(rtty, "RTTY"); }
             ((CardLayout) tarjetas.getLayout()).show(tarjetas, "RTTY");
@@ -931,8 +936,28 @@ class VentanaDigitales extends JFrame {
         llenarBandas();
     }
 
+    /** CW: igual que RTTY, la parte de abajo cambia a la de CW. */
+    private void ponerCw(boolean si) {
+        if (si == enCw) return;
+        if (si) {
+            ponerRtty(false);
+            if (txActivo || emisor.transmitiendo()) desactivarTx("Se ha cambiado a CW: transmisión de FT8/FT4 parada.");
+            if (cw == null) { cw = new VentanaCw(app, this); tarjetas.add(cw, "CW"); }
+            ((CardLayout) tarjetas.getLayout()).show(tarjetas, "CW");
+            enCw = true;
+            cw.activar();
+            lblEstado.setText("  Modo CW: elige la banda arriba para ir a la zona de CW.");
+        } else {
+            if (cw != null) cw.desactivar();
+            ((CardLayout) tarjetas.getLayout()).show(tarjetas, "FT");
+            enCw = false;
+        }
+        llenarBandas();
+    }
+
     private void cambiarModo(String m) {
         ponerRtty(false);
+        ponerCw(false);
         if (txActivo || emisor.transmitiendo()) desactivarTx("Se ha cambiado de modo: transmisión parada.");
         motor.ponerModo("FT4".equals(m) ? GeneradorFtx.Modo.FT4 : GeneradorFtx.Modo.FT8);
         LibroGuardiaUI.ConfigApp.put("DIGITALES_MODO", m);
@@ -942,12 +967,12 @@ class VentanaDigitales extends JFrame {
     }
 
     private void llenarBandas() {
-        String[][] tabla = enRtty ? FREC_RTTY : motor.modo() == GeneradorFtx.Modo.FT8 ? FREC_FT8 : FREC_FT4;
+        String[][] tabla = enCw ? FREC_CW : enRtty ? FREC_RTTY : motor.modo() == GeneradorFtx.Modo.FT8 ? FREC_FT8 : FREC_FT4;
         for (Map.Entry<String, JToggleButton> e : botonesBanda.entrySet()) {
             String hz = null;
             for (String[] b : tabla) if (b[0].equals(e.getKey())) hz = b[1];
             e.getValue().setEnabled(hz != null);
-            Object nm = enRtty ? "RTTY" : motor.modo();
+            Object nm = enCw ? "CW" : enRtty ? "RTTY" : motor.modo();
             e.getValue().setToolTipText(hz == null ? e.getKey() + ": no hay frecuencia de " + nm
                     : e.getKey() + ": ir a " + formatoMhz(Long.parseLong(hz)) + " MHz (" + nm + ")"
                     + ("CB".equals(e.getKey()) ? " · en CB solo se escucha" : ""));
@@ -1085,7 +1110,7 @@ class VentanaDigitales extends JFrame {
 
     /** Botón de banda: a la frecuencia de llamada de FT8/FT4 de esa banda. */
     private void irABanda(String banda) {
-        String[][] tabla = enRtty ? FREC_RTTY : motor.modo() == GeneradorFtx.Modo.FT8 ? FREC_FT8 : FREC_FT4;
+        String[][] tabla = enCw ? FREC_CW : enRtty ? FREC_RTTY : motor.modo() == GeneradorFtx.Modo.FT8 ? FREC_FT8 : FREC_FT4;
         for (String[] b : tabla) if (b[0].equals(banda)) { irAFrecuencia(Long.parseLong(b[1])); break; }
         ponerBandaEnLista(frecuenciaEmisora());
     }
@@ -1098,10 +1123,11 @@ class VentanaDigitales extends JFrame {
         String f = String.format(Locale.GERMANY, "%,d", hz);
         cat.frecuenciaPorPrograma = true;
         try { app.txtFreqTx.setText(f); app.txtFreqRx.setText(f); } finally { cat.frecuenciaPorPrograma = false; }
-        String m = motor.modo().name();
+        String m = enCw ? "CW" : enRtty ? "RTTY" : motor.modo().name();
         if (ControlEmisora.comboContiene(app.cbModo, m)) app.cbModo.setSelectedItem(m);
         if (LibroGuardiaUI.catConectado) {
-            int codigo = codigoModoTx(hz);
+            // CW manipulando por puerto COM: la emisora en CW; CW con tono de audio, FT8/FT4 y RTTY: como diga «Modo al transmitir»
+            int codigo = enCw && cw != null && cw.manipulaPorCom() ? ControlEmisora.codigoModoOmniRig("CW", hz) : codigoModoTx(hz);
             cat.enviarOrden("DIGITALES " + f, rig -> {
                 ControlEmisora.ponerFrecuenciaEmisora(rig, (int) hz);
                 if (codigo != 0) ponerModoEmisora(rig, codigo);
@@ -1109,7 +1135,8 @@ class VentanaDigitales extends JFrame {
         }
         cat.refrescarFrontal();
         String nm = "DATOS".equals(modoTx) ? " (modo DATOS)" : "USB".equals(modoTx) ? " USB" : "";
-        lblEstado.setText("  " + motor.modo() + " en " + formatoMhz(hz) + " MHz" + nm + (LibroGuardiaUI.catConectado ? " (la emisora también)" : " (sin CAT: pon la emisora a mano)"));
+        if (enCw && cw != null && cw.manipulaPorCom()) nm = " (modo CW)";
+        lblEstado.setText("  " + m + " en " + formatoMhz(hz) + " MHz" + nm + (LibroGuardiaUI.catConectado ? " (la emisora también)" : " (sin CAT: pon la emisora a mano)"));
     }
 
     /** Los campos de Hz solo admiten números (regla de Bitácora 26). */
@@ -2422,7 +2449,7 @@ class VentanaDigitales extends JFrame {
         ponerBandaEnLista(hz);
         String banda = hz > 0 ? app.bandaPorFrecuencia(hz) : "";
         String act = actividad();
-        lblBandaModo.setText((banda == null || banda.isEmpty() ? "" : banda + " · ") + (enRtty ? "RTTY" : motor.modo() + (NINGUNO.equals(act) ? "" : " · " + act.replace('_', ' ')))
+        lblBandaModo.setText((banda == null || banda.isEmpty() ? "" : banda + " · ") + (enCw ? "CW" : enRtty ? "RTTY" : motor.modo() + (NINGUNO.equals(act) ? "" : " · " + act.replace('_', ' ')))
                 + (LibroGuardiaUI.catConectado ? " · CAT conectado" : " · sin CAT"));
         if (!miIndicativo().equals(motor.mensajes() == null ? "" : ultimoMio)) { ultimoMio = miIndicativo(); actualizarOpciones(); generarMensajes(); }
         // protecciones mientras se transmite

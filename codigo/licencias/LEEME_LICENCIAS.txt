@@ -67,6 +67,10 @@ mantiene su propia licencia, cuyo texto está en esta carpeta:
     y Nobuyuki Oba). Licencia GNU LGPL v3 (LGPL-3.0.txt).
     https://github.com/n5ac/mmtty
 
+15) CW: descodificador con ideas de fldigi (W1HKJ y colaboradores, licencia
+    GNU GPL v3, LICENSE.txt) y de ggmorse (Georgi Gerganov, licencia MIT,
+    texto en CREDITOS.txt). https://github.com/ggerganov/ggmorse
+
 CÓDIGO FUENTE DE BITÁCORA 26
 - Bitácora 26 es software libre, licencia GNU GPL v3 (LICENSE.txt), con los
   términos adicionales de TERMINOS-ADICIONALES.txt.

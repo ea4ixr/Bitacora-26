@@ -1098,6 +1098,7 @@ public class LibroGuardiaUI extends JFrame {
         primeraSync.start();
         logWeb.arrancar();
         ConfigAudio.aplicarAlArrancar();   // canal de audio elegido para la entrada y la salida
+        ConfirmacionesOnline.arrancar(this);   // eQSL, LoTW y QRZ.com: confirmaciones al minuto de arrancar y cada 3 horas
         // WSJT-X: los contactos que se registran en WSJT-X entran solos en el log
         arrancarEscuchaWsjtx();
         // Al arrancar: si hay una emisora en uso y activa (Configurar Emisoras), el CAT se conecta solo (un único intento)
@@ -2391,7 +2392,7 @@ public class LibroGuardiaUI extends JFrame {
     record VersionNueva(String version, String url, String sha256, long tamano, String notas) { }
 
     /** Versión del programa. Tiene que ser la misma que APP_VERSION de empaquetar.bat. */
-    static final String VERSION_APP = "1.38";
+    static final String VERSION_APP = "1.39";
 
     /** Versión del programa instalado (la pone empaquetar.bat; desde IntelliJ, la de VERSION_APP). */
     static String versionInstalada() {
@@ -3852,6 +3853,7 @@ public class LibroGuardiaUI extends JFrame {
             "CLUBLOG_EMAIL", "CLUBLOG_PWD", "CLUBLOG_CALL", "CLUBLOG_SUBIR_AUTO",
             "HRDLOG_USER", "HRDLOG_CODE", "HRDLOG_SUBIR_AUTO", "HRDLOG_ONAIR",
             "HAMQTH_USER", "HAMQTH_PWD", "HAMQTH_CALL", "HAMQTH_SUBIR_AUTO",
+            "EQSL_BAJAR", "QRZ_BAJAR", "LOTW_USER", "LOTW_PWD", "LOTW_BAJAR",
             "CLUSTER_URE_CALL", "CLUSTER_URE_PWD", "CLUSTER_DXFUN_CALL", "CLUSTER_DXFUN_PWD"};
     private static final String[] CLAVES_SUBIR_AUTO = {"QRZ_SUBIR_AUTO", "EQSL_SUBIR_AUTO", "CLUBLOG_SUBIR_AUTO", "HRDLOG_SUBIR_AUTO", "HAMQTH_SUBIR_AUTO"};
 
@@ -3880,6 +3882,9 @@ public class LibroGuardiaUI extends JFrame {
     static String datoServicioActual(String clave) {
         return servicio(operadorActual == null ? "" : operadorActual.trim().toUpperCase(), clave, "");
     }
+
+    /** Para ConfirmacionesOnline: un dato de los servicios de un operador. */
+    static String datoServicio(String op, String clave) { return servicio(op, clave, ""); }
 
     /** Un dato de los servicios online de un operador concreto. */
     private static String servicio(String op, String clave, String def) {
@@ -4216,6 +4221,10 @@ public class LibroGuardiaUI extends JFrame {
                         return new String[]{"OK", "usuario y contraseña correctos."};
                     }
                 }
+                case "LOTW": {
+                    String r = ConfirmacionesOnline.probarLotw(d.getOrDefault("LOTW_USER", ""), d.getOrDefault("LOTW_PWD", ""));
+                    return r == null ? new String[]{"OK", "usuario y contraseña correctos."} : new String[]{"MAL", r};
+                }
                 case "CLUSTER URE":
                 case "CLUSTER DXFUN": {
                     boolean ure = servicio.equalsIgnoreCase("Cluster URE");
@@ -4475,6 +4484,7 @@ public class LibroGuardiaUI extends JFrame {
                 {"Contraseña:", "QRZ_PWD", "P"},
                 {"API Key (logbook):", "QRZ_API_KEY", "T", "MAY"},
                 {"Subir cada contacto", "QRZ_SUBIR_AUTO", "C"},
+                {"Bajar mis confirmaciones (pone la ★)", "QRZ_BAJAR", "C"},
                 {"+Forzar indicativo de estación:", "QRZ_FORZAR_INDICATIVO", "T", "MAY"}},
                 "El usuario y la contraseña sirven para buscar indicativos (se comprueban al guardar). "
                         + "La <b>API Key</b> es para subir los contactos a tu logbook de QRZ.com: está en QRZ.com → Logbook → Settings. "
@@ -4485,8 +4495,16 @@ public class LibroGuardiaUI extends JFrame {
                 {"Usuario:", "EQSL_USER", "T", "MAY"},
                 {"Contraseña:", "EQSL_PWD", "P"},
                 {"Subir cada contacto", "EQSL_SUBIR_AUTO", "C"},
+                {"Bajar las QSL que me llegan (con su imagen)", "EQSL_BAJAR", "C"},
                 {"+QTH Nickname:", "EQSL_QTH_NICK", "T"}},
-                "El QTH Nickname es el nombre que le diste a tu ubicación en eQSL.cc (si tienes varias)."));
+                "El QTH Nickname es el nombre que le diste a tu ubicación en eQSL.cc (si tienes varias). "
+                        + "Las QSL que te llegan se guardan en la carpeta QSL y su contacto se marca con la ★."));
+        anadirServicio.accept("LoTW", pestana.apply(new String[][]{
+                {"Usuario (web de LoTW):", "LOTW_USER", "T", "MAY"},
+                {"Contraseña (web de LoTW):", "LOTW_PWD", "P"},
+                {"Bajar mis confirmaciones (pone la ★)", "LOTW_BAJAR", "C"}},
+                "Son el usuario y la contraseña con los que entras en la web lotw.arrl.org (no hace falta el certificado de TQSL para bajar). "
+                        + "LoTW no tiene tarjetas: solo dice qué contactos están confirmados, que son los que cuentan para el DXCC."));
         anadirServicio.accept("Club Log", pestana.apply(new String[][]{
                 {"E-mail:", "CLUBLOG_EMAIL", "T"},
                 {"Contraseña:", "CLUBLOG_PWD", "P"},
@@ -4530,7 +4548,7 @@ public class LibroGuardiaUI extends JFrame {
         };
         String[][] servicios = {   // nombre, campo principal, casilla de subir
                 {"QRZ.COM", "QRZ_USER", "QRZ_SUBIR_AUTO"}, {"eQSL", "EQSL_USER", "EQSL_SUBIR_AUTO"}, {"Club Log", "CLUBLOG_EMAIL", "CLUBLOG_SUBIR_AUTO"},
-                {"HRDLog", "HRDLOG_USER", "HRDLOG_SUBIR_AUTO"}, {"HamQTH", "HAMQTH_USER", "HAMQTH_SUBIR_AUTO"},
+                {"HRDLog", "HRDLOG_USER", "HRDLOG_SUBIR_AUTO"}, {"HamQTH", "HAMQTH_USER", "HAMQTH_SUBIR_AUTO"}, {"LoTW", "LOTW_USER", "LOTW_BAJAR"},
                 {"Cluster URE", "CLUSTER_URE_PWD", null}, {"Cluster DXFun", "CLUSTER_DXFUN_PWD", null}};
         Map<String, JLabel> estados = new HashMap<>();
         Map<String, String> resultadoPrueba = new HashMap<>();   // lo que dijo «Probar» (si se ha probado)
@@ -4544,7 +4562,8 @@ public class LibroGuardiaUI extends JFrame {
                 if (prueba != null && prueba.startsWith("✗")) l.setText("<html><font color='#ff6b5e'>" + prueba + "</font></html>");
                 else if (!conf) l.setText("<html><font color='#8796ad'>sin configurar</font></html>");
                 else l.setText("<html><font color='#4cd07d'>" + ("✓".equals(prueba) ? "✓ probado: funciona" : "✓ configurado") + "</font>"
-                        + (sv[2] == null ? " · para anunciar" : sube ? " · sube cada contacto" : " · no sube contactos") + "</html>");
+                        + (sv[2] == null ? " · para anunciar" : "LoTW".equals(sv[0]) ? (sube ? " · baja confirmaciones" : " · no baja nada")
+                        : sube ? " · sube cada contacto" : " · no sube contactos") + "</html>");
             }
         };
         JButton btnProbar = new JButton("Probar");
@@ -9567,6 +9586,7 @@ public class LibroGuardiaUI extends JFrame {
                 pstmt.executeUpdate();
             }
             subirQsoAutomatico(uuid);   // a los servicios online que tengan marcada la casilla
+            cuentaB26.contactoGuardado();   // Bitácora 26: se sube enseguida y, si está marcado, se manda mi QSL
             // Diploma automático: si el diploma de la actividad está configurado así, se crea al añadir el contacto
             if (actividadNumeral > 0 && "AUTO".equals(ConfigApp.get("DIPLOMA_MODO_" + actividadNumeral, ""))) {
                 Map<String, String> qsoDip = new HashMap<>();
@@ -12544,6 +12564,8 @@ public class LibroGuardiaUI extends JFrame {
                 // QSL que han llegado (el fichero está en Documentos\Libro de Guardia\QSL)
                 try { stmt.execute("CREATE TABLE IF NOT EXISTS qsl_recibidas (id INTEGER PRIMARY KEY AUTOINCREMENT, fichero TEXT, de TEXT, cuenta TEXT, "
                         + "minuto INTEGER, banda TEXT, modo TEXT, uuid_contacto TEXT DEFAULT '', llegada INTEGER, vista INTEGER DEFAULT 0)"); } catch (Exception ignored) {}
+                // De dónde vino la QSL: '' = Bitácora 26, 'eQSL' = bajada de eQSL.cc
+                try { stmt.execute("ALTER TABLE qsl_recibidas ADD COLUMN origen TEXT DEFAULT ''"); } catch (Exception ignored) {}
                 // Al borrar un contacto ya subido, se apunta para quitarlo también del servidor
                 try { stmt.execute("CREATE TRIGGER IF NOT EXISTS b26_al_borrar AFTER DELETE ON qsos WHEN COALESCE(OLD.b26_sub,0) = 1 AND COALESCE(OLD.uuid,'') <> '' "
                         + "BEGIN INSERT OR REPLACE INTO b26_borrados (uuid, cuenta) VALUES (OLD.uuid, COALESCE(OLD.b26_cuenta,'')); END"); } catch (Exception ignored) {}

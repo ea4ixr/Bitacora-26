@@ -505,6 +505,7 @@ final class VentanaRtty extends JPanel {
     }
 
     private void lanzarMacro(int i) {
+        if (!isShowing()) return;   // las teclas F1…F8 son de la parte (RTTY o CW) que se está viendo
         String m = macroTexto(i);
         if (m.isBlank()) { txt.requestFocus(); return; }
         if (m.contains("<SU>") && cInd.getText().isBlank()) { lblEstado.setText("Primero elige el indicativo (pincha en él en el texto recibido)."); return; }
