@@ -1144,6 +1144,8 @@ public class LibroGuardiaUI extends JFrame {
         javax.swing.Timer avisoSinCuenta = new javax.swing.Timer(12000, e -> cuentaB26.avisarSincronizarSinCuenta());
         avisoSinCuenta.setRepeats(false);
         avisoSinCuenta.start();
+        // Próximas actividades: avisos 15 minutos antes de las que el usuario ha marcado con «Avisarme»
+        ProximasActividades.arrancarAvisos(this);
         // Ofrecer (una vez) guardar la clave del radioclub en la cuenta, para no pedirla en los otros ordenadores
         javax.swing.Timer ofrecerClaveRc = new javax.swing.Timer(20000, e -> { radioclub.revisarIndicativosAntiguosRC(); radioclub.unirseSiLaCuentaLoLleva(); });
         ofrecerClaveRc.setRepeats(false);
@@ -2392,7 +2394,7 @@ public class LibroGuardiaUI extends JFrame {
     record VersionNueva(String version, String url, String sha256, long tamano, String notas) { }
 
     /** Versión del programa. Tiene que ser la misma que APP_VERSION de empaquetar.bat. */
-    static final String VERSION_APP = "1.39";
+    static final String VERSION_APP = "1.40";
 
     /** Versión del programa instalado (la pone empaquetar.bat; desde IntelliJ, la de VERSION_APP). */
     static String versionInstalada() {
@@ -6727,6 +6729,18 @@ public class LibroGuardiaUI extends JFrame {
         gbc.insets = new Insets(2, 4, 2, 4);
         gbc.gridy = y++; panel.add(chkActividadRC, gbc);
         gbc.gridy = y++; panel.add(filaIndRCAct, gbc);
+        // Próximas actividades: anunciarla (día, hora, frecuencias, diploma) para que la vea todo el mundo, en la app y en la web
+        ProximasActividades.PanelAnuncio panelAnuncio = new ProximasActividades.PanelAnuncio(this, true);
+        Runnable indAnuncio = () -> {
+            Object it = cbIndRCAct.getSelectedItem();
+            if (chkActividadRC.isSelected() && it != null) panelAnuncio.ponerIndicativo(it.toString().split(":")[0]);
+            else panelAnuncio.ponerIndicativo(operadorActual);
+        };
+        chkActividadRC.addActionListener(ev -> indAnuncio.run());
+        cbIndRCAct.addActionListener(ev -> indAnuncio.run());
+        gbc.insets = new Insets(10, 4, 2, 4);
+        gbc.gridy = y++; panel.add(panelAnuncio, gbc);
+        gbc.insets = new Insets(2, 4, 2, 4);
         JButton btnCancelarAct = new JButton("Cancelar");
         btnCancelarAct.setFont(btnCancelarAct.getFont().deriveFont(14f));
         btnCancelarAct.addActionListener(ev -> dialogo.dispose());
@@ -6747,6 +6761,13 @@ public class LibroGuardiaUI extends JFrame {
 
             boolean esPorPuntos = rbPuntos.isSelected();
             String tipo = esPorPuntos ? "PUNTOS" : "SIMPLE";
+            // Si se anuncia, se comprueba antes de crear nada (día, horas, indicativo)
+            String jsonAnuncio = panelAnuncio.anunciar()
+                    ? panelAnuncio.json(nombreVisible, "", chkActividadRC.isSelected() ? radioclub.nombreRadioclub() : "") : null;
+            if (jsonAnuncio != null && jsonAnuncio.startsWith("!")) {
+                JOptionPane.showMessageDialog(dialogo, jsonAnuncio.substring(1), "Próximas actividades", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
             String bandaSimple = "";
             String modoSimple = "";
@@ -6800,6 +6821,18 @@ public class LibroGuardiaUI extends JFrame {
             }
 
             dialogo.dispose();
+
+            if (jsonAnuncio != null) {
+                final String nombreAnuncio = nombreVisible;
+                new Thread(() -> {
+                    String[] r = ProximasActividades.guardar(this, jsonAnuncio);
+                    SwingUtilities.invokeLater(() -> {
+                        if (r[0] == null) lblEstado.setText("Actividad «" + nombreAnuncio + "» anunciada en Próximas actividades (app y web)");
+                        else JOptionPane.showMessageDialog(this, "La actividad se ha creado, pero no se ha podido anunciar en Próximas actividades:\n" + r[0]
+                                + "\n\nPuedes anunciarla luego en Cluster → Próximas actividades.", "Próximas actividades", JOptionPane.WARNING_MESSAGE);
+                    });
+                }, "anunciar-actividad").start();
+            }
 
             actualizarDesplegableActividades();
             seleccionarActividadEnDesplegable(nuevoNumeral);

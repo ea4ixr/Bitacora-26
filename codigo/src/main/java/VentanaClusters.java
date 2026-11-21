@@ -105,6 +105,7 @@ final class VentanaClusters extends JFrame {
         btnAnunciar.setFocusable(false);
         btnAnunciar.addActionListener(e -> ventanaAnunciar());
         filaPest.add(pd, BorderLayout.EAST);
+        pd.add(ProximasActividades.boton(app), 0);   // Próximas actividades anunciadas por los usuarios
         arriba.add(filaPest, BorderLayout.NORTH);
 
         // ---- Filtros

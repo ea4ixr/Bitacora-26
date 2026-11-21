@@ -169,7 +169,7 @@ class Cluster {
     }
 
     /** Cuenta para ver el cluster: la de ON AIR, la del operador o, si no, cualquiera de este ordenador. "" si no hay ninguna. */
-    private String cuentaParaVer() {
+    String cuentaParaVer() {
         if (onAir && !ultimaCuentaOnAir.isEmpty()) return ultimaCuentaOnAir;
         String c = app.operadorActual == null || app.operadorActual.isBlank() ? "" : CuentaBitacora.cuentaB26DeOperador(app.operadorActual);
         if (c.isEmpty()) {
